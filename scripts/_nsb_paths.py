@@ -75,3 +75,13 @@ def latest_local_nsb() -> Path:
 
 def latest_local_nsb_year() -> int:
     return int(re.match(r"nsb_(\d{4})\.pdf", latest_local_nsb().name).group(1))
+
+
+def latest_local_nsb_url() -> str | None:
+    """Return the URL the latest NSB was downloaded from, or None if the
+    sidecar .url file is missing (e.g. PDF was placed manually)."""
+    pdf = latest_local_nsb()
+    url_path = pdf.with_suffix(".url")
+    if url_path.exists():
+        return url_path.read_text().strip() or None
+    return None

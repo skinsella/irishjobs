@@ -388,6 +388,12 @@ def main() -> None:
     with pdfplumber.open(PDF) as pdf:
         sections = discover_sections(pdf)
         print(f"Found {len(sections)} Section-10 sub-chapters")
+        # Persist {section name → 1-based PDF page} so 04_make_csv.py can
+        # build per-occupation deep-link URLs (#page=N in the PDF).
+        sect_pages = {s["name"]: s["start"] + 1 for s in sections}
+        (REPO / "raw" / "_nsb_section_pages.json").write_text(
+            json.dumps(sect_pages, indent=2)
+        )
 
         # For each section, parse stats + narratives, then write MD for
         # every group whose slug exists in occupations.json AND whose

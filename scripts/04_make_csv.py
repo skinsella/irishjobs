@@ -26,11 +26,24 @@ import json
 import re
 from pathlib import Path
 
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _nsb_paths import latest_local_nsb_url, latest_local_nsb_year
+
 REPO = Path(__file__).resolve().parent.parent
 INDEX = REPO / "occupations.json"
 PAGES = REPO / "pages"
 DEN11 = REPO / "raw" / "pxstat" / "DEN11.json"
+EHQ15 = REPO / "raw" / "pxstat" / "EHQ15.json"
+SECTION_PAGES = REPO / "raw" / "_nsb_section_pages.json"
 OUT = REPO / "occupations.csv"
+
+# Fallback landing page if the deep-link URL can't be constructed.
+# Verified 2026-05-22: /research/ suffix returns 200, the bare /slmru/
+# path returns 404 (which is what was shipping before).
+SOLAS_LANDING_FALLBACK = (
+    "https://www.solas.ie/research-lp/skills-labour-market-research-slmru/research/"
+)
 
 # Map NSB sector chapter → Department of Finance AI risk tier.
 # Tiers follow the framework in Williamson, Gannon, Daly, Fitzgerald & Coates
@@ -75,8 +88,119 @@ NACE_KEYWORD_MAP = [
     (["public administration", "defence"], 9),                      # Public admin (O)
     (["education"], 10),                                            # Education (P)
     (["health", "social work"], 11),                                # Health/social (Q)
-    (["arts", "entertainment", "recreation"], 12),                  # Arts/entertain (R,S)
+    (["arts", "entertainment", "recreation",
+      "other nace", "other service"], 12),                          # Arts/personal services (R,S)
 ]
+
+
+# Maps the 21 NACE Rev.2 sections to the DEN11 13-section index used by
+# NACE_KEYWORD_MAP. (DEN11 collapses K+L and R+S; B-E into "Industry".)
+NACE_DIVISION_TO_DEN11_IDX = {
+    # B-E Industry (DEN11 idx 0)
+    **{d: 0 for d in [5,6,7,8,9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33, 35, 36,37,38,39]},
+    # F Construction (1)
+    **{d: 1 for d in [41,42,43]},
+    # G Wholesale and retail (2)
+    **{d: 2 for d in [45,46,47]},
+    # H Transportation and storage (3)
+    **{d: 3 for d in [49,50,51,52,53]},
+    # I Accommodation and food (4)
+    **{d: 4 for d in [55,56]},
+    # J Information & communication (ICT) (5)
+    **{d: 5 for d in [58,59,60,61,62,63]},
+    # K-L Financial/Insurance/Real estate (6)
+    **{d: 6 for d in [64,65,66, 68]},
+    # M Professional/scientific/technical (7)
+    **{d: 7 for d in [69,70,71,72,73,74,75]},
+    # N Administrative/support (8)
+    **{d: 8 for d in [77,78,79,80,81,82]},
+    # O Public admin/defence (9)
+    **{d: 9 for d in [84]},
+    # P Education (10)
+    **{d: 10 for d in [85]},
+    # Q Health/social (11)
+    **{d: 11 for d in [86,87,88]},
+    # R-S Arts/entertainment + other personal services (12)
+    **{d: 12 for d in [90,91,92,93, 94,95,96]},
+}
+
+
+def _ehq15_label_to_divisions(label: str) -> list[int]:
+    """Parse the (NN), (NN,MM), or (NN to MM) suffix off an EHQ15 label."""
+    m = re.search(r"\(([0-9, to]+)\)\s*$", label)
+    if not m:
+        return []
+    body = m.group(1).replace(" to ", "-")
+    out: list[int] = []
+    for chunk in re.split(r",\s*", body):
+        chunk = chunk.strip()
+        if "-" in chunk:
+            a, b = chunk.split("-")
+            try:
+                out.extend(range(int(a), int(b) + 1))
+            except ValueError:
+                pass
+        else:
+            try:
+                out.append(int(chunk))
+            except ValueError:
+                pass
+    return out
+
+
+def load_ehq15_mean_weekly_latest() -> tuple[dict[int, float], str]:
+    """Compute mean weekly earnings by DEN11-style sector index from EHQ15,
+    using the latest available quarter. Returns ({den11_idx: €/week}, "YYYYQn").
+
+    EHQ15 is at 2-digit NACE division level. We group each division into
+    its NACE Rev.2 section (e.g. all manufacturing divisions → Industry),
+    average the per-division mean weekly earnings within each section,
+    and return one number per DEN11 sector index.
+    """
+    d = json.loads(EHQ15.read_text())
+    dims = d["dimension"]
+    dim_ids = d["id"]
+    sizes = d["size"]
+    values = d["value"]
+
+    def label_idx(dim_id: str, label: str) -> int:
+        cat = dims[dim_id]["category"]
+        for code, name in cat["label"].items():
+            if name == label:
+                return cat["index"].index(code)
+        raise KeyError(f"{label!r} not in {dim_id}")
+
+    statistic_idx = label_idx(dim_ids[0], "Earnings Per Week")
+    quarters = list(dims[dim_ids[1]]["category"]["label"].values())
+    latest_q = quarters[-1]
+    quarter_idx = len(quarters) - 1
+
+    # Average division-level earnings within each DEN11 section.
+    bucket: dict[int, list[float]] = {}
+    sector_codes = dims[dim_ids[2]]["category"]["index"]
+    sector_labels = dims[dim_ids[2]]["category"]["label"]
+    for sec_idx, code in enumerate(sector_codes):
+        label = sector_labels[code]
+        divisions = _ehq15_label_to_divisions(label)
+        if not divisions:
+            continue
+        # Map each division to a DEN11 section index; skip divisions we
+        # don't classify (rare; "L Real estate" is folded into K).
+        targets = {NACE_DIVISION_TO_DEN11_IDX.get(div)
+                   for div in divisions
+                   if NACE_DIVISION_TO_DEN11_IDX.get(div) is not None}
+        flat = ((statistic_idx * sizes[1] + quarter_idx) * sizes[2]) + sec_idx
+        try:
+            v = values[flat]
+        except IndexError:
+            continue
+        if v is None:
+            continue
+        for tgt in targets:
+            bucket.setdefault(tgt, []).append(float(v))
+
+    out = {idx: sum(vals)/len(vals) for idx, vals in bucket.items() if vals}
+    return out, latest_q
 
 
 def load_den11_median_weekly_2024() -> dict[int, float]:
@@ -207,10 +331,56 @@ def classify_outlook(growth_pct: float | None, shortage: str) -> str:
     return "Decline"
 
 
+def build_url_resolver():
+    """Return a function entry → URL that points into the NSB PDF at the
+    occupation's Section 10 chapter when possible. Falls back to the SOLAS
+    landing page (verified live)."""
+    nsb_url = latest_local_nsb_url()
+    section_pages: dict[str, int] = {}
+    if SECTION_PAGES.exists():
+        section_pages = json.loads(SECTION_PAGES.read_text())
+
+    # Section names like "ICT Occupations" need to be matched to the
+    # appendix-style category like "ICT" (which is what entries carry).
+    # Build a {canonical-tokens: page} lookup.
+    STOP = {"and", "the", "of", "in", "for", "marketing", "secretarial",
+            "n", "e", "c"}
+
+    def canon_tokens(s: str) -> frozenset[str]:
+        s = re.sub(r"\s*Occupations(?:\s+n\.e\.c\.)?\s*$", "", s).strip()
+        return frozenset(t for t in re.findall(r"\w+", s.lower()) if t not in STOP)
+
+    tok_to_page = {canon_tokens(name): pg for name, pg in section_pages.items()}
+
+    def resolve(entry: dict) -> str:
+        if not nsb_url:
+            return SOLAS_LANDING_FALLBACK
+        want = canon_tokens(entry.get("category", ""))
+        best, best_n = None, 0
+        for keys, pg in tok_to_page.items():
+            n = len(keys & want)
+            if n > best_n:
+                best_n, best = n, pg
+        if best is not None:
+            return f"{nsb_url}#page={best}"
+        return nsb_url  # bare PDF link if no section match
+    return resolve
+
+
 def main() -> None:
     entries = json.loads(INDEX.read_text())
-    weekly_by_sector = load_den11_median_weekly_2024()
-    print(f"DEN11 median weekly earnings by NACE sector (2024):")
+    # Pay axis: EHQ15 mean weekly earnings (latest available quarter,
+    # currently Q3 2025) is preferred for currency; DEN11 median weekly
+    # (2024 full year) is kept as a cross-reference.
+    #
+    # METHODOLOGY NOTE: EHQ15 reports MEAN weekly earnings (sensitive to
+    # outliers) while DEN11 reports MEDIAN (insensitive). For most
+    # sectors the mean exceeds the median by ~5–10% because of the
+    # right-skewed pay distribution. The frontend labels the layer as
+    # "Mean weekly earnings, Q3 2025" so the methodology is visible.
+    weekly_by_sector, latest_q = load_ehq15_mean_weekly_latest()
+    resolve_url = build_url_resolver()
+    print(f"EHQ15 mean weekly earnings by NACE sector ({latest_q}):")
     for idx, val in sorted(weekly_by_sector.items()):
         print(f"  [{idx}] €{val:,.2f}")
 
@@ -273,7 +443,7 @@ def main() -> None:
             "outlook_desc": classify_outlook(growth_val, shortage),
             "employment_change": "",
             "dof_risk_tier": DOF_RISK_TIER.get(entry["category"], ""),
-            "url": entry["url"],
+            "url": resolve_url(entry),
         }
         rows.append(row)
 

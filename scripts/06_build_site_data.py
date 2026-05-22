@@ -49,7 +49,8 @@ def build_vintage_block() -> dict:
     data_year = nsb_year - 1
     growth_window = f"{data_year - 5}–{data_year}"
 
-    den11_year = _latest_label_in_pxstat("DEN11", "TLIST(A1)")
+    ehq15_qtr = _latest_label_in_pxstat("EHQ15", "TLIST(Q1)")
+    den11_year = _latest_label_in_pxstat("DEN11", "TLIST(A1)")  # kept for reference
     return {
         "jobs": {
             "label": f"NSB {nsb_year}",
@@ -62,9 +63,9 @@ def build_vintage_block() -> dict:
             "source": "SOLAS National Skills Bulletin",
         },
         "pay": {
-            "label": f"CSO DEN11 {den11_year}" if den11_year else "CSO DEN11",
-            "detail": f"Median weekly earnings × NACE-sector mix × 52",
-            "source": "CSO Earnings Analysis Admin Data, sector-weighted",
+            "label": f"CSO EHQ15 {ehq15_qtr}" if ehq15_qtr else "CSO EHQ15",
+            "detail": "Mean weekly earnings (NACE section avg) × NSB-sector mix × 52",
+            "source": "CSO Earnings & Labour Costs, sector-weighted",
         },
         "education": {
             "label": f"NSB {nsb_year}",

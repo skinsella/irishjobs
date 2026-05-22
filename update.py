@@ -95,6 +95,9 @@ def refresh_pdf(force: bool) -> bool:
     r = httpx.get(url, timeout=120, follow_redirects=True)
     r.raise_for_status()
     target.write_bytes(r.content)
+    # Record the URL alongside the PDF so downstream scripts (04, 06)
+    # can build deep-link URLs without re-scraping SOLAS.
+    target.with_suffix(".url").write_text(url + "\n")
     print(f"  → {target.relative_to(REPO)} ({len(r.content):,} bytes)")
     return True
 
