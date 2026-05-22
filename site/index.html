@@ -213,6 +213,10 @@ canvas#canvas {
     <p>This is a research tool that visualises <b>100 occupational groups</b> from the SOLAS <a href="https://www.solas.ie/research-lp/skills-labour-market-research-slmru/">National Skills Bulletin 2025</a> covering Ireland's labour market — about <b>2.6M of the 2.76M total LFS-reported workforce</b> (the ~100K gap is workers in groups the NSB does not classify into its 16 chapters, plus 6 groups our PDF parser cannot match to a chart column). Each rectangle's <b>area</b> is proportional to that group's NSB-published employment level (2024 annual average). <b>Colour</b> shows the selected metric &mdash; toggle between 5-year historical growth (NSB), sector-implied median pay (CSO), education profile (NSB), and AI exposure (LLM). Click any tile to view the SOLAS source page. Port of <a href="https://karpathy.ai/jobs/">karpathy.ai/jobs</a> to Irish data; see <a href="https://github.com/skinsella/irishjobs#data-lineage--every-figure-on-screen-every-source">the README data-lineage ledger</a> for source of every field.</p>
     <p><b>Data caveats:</b> Ireland has no public dataset equivalent to the US Bureau of Labor Statistics OOH. The NSB groups SOC2010 unit groups into ~100 occupational groups; CSO's public earnings tables only break down by NACE sector, so the pay layer here is a <i>sector-weighted estimate</i> using each occupation's main-sector mix from the NSB profile. The outlook layer is the <i>5-year historical employment growth rate (2019&ndash;2024)</i> — there is no Irish occupational-level forward projection equivalent to BLS's 10-year forecast.</p>
     <p><b>AI exposure (two axes):</b> Following the Department of Finance / DETE framework in <a href="https://assets.gov.ie/static/documents/artificial-intelligence-friend-or-foe-an-analysis-of-how-ai-could-impact-irelands-labo.pdf">Williamson et al. (2024) "AI: Friend or Foe?"</a> and the <a href="https://assets.gov.ie/static/documents/391b8952/Economic_Insights_Volume_1_2026.pdf">DoF Economic Insights Volume 1 2026</a>, this site splits AI exposure into <b>complementary</b> ("AI makes the worker more productive") and <b>substitutable</b> ("AI displaces the work"). Use the buttons below to colour the treemap by either axis, or by the overall maximum. Each occupation is also tagged with the DoF's high / medium / low risk tier (shown in the tooltip) — recent CSO data shows that "high risk" sectors grew employment by only 3.1% in 2023–2025 vs 6.2% in low-risk sectors, with under-30 ICT employment falling 32% over the same window.</p>
+    <details style="margin-top:10px;">
+      <summary>Data vintage per layer (every figure traces to a dated source)</summary>
+      <div id="vintageTable" style="margin-top:8px;font-size:12px;line-height:1.7;"></div>
+    </details>
     <details>
       <summary>View the Digital AI Exposure scoring prompt (example)</summary>
       <div class="prompt-box">You are an expert analyst evaluating how exposed different occupations are to AI. You will be given a detailed description of an occupation from the SOLAS National Skills Bulletin (Ireland's annual labour-market report).
@@ -259,6 +263,11 @@ Respond with ONLY a JSON object in this exact format, no other text:
       <span id="legendLow">Declining</span>
       <canvas id="gradientLegend" width="80" height="8"></canvas>
       <span id="legendHigh">Growing</span>
+    </div>
+    <div id="vintageBadge" title="Data vintage of the active layer"
+      style="padding:3px 9px;border-radius:10px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--fg2);">
+      <span id="vintageLabel">&mdash;</span>
+      <span id="vintageDetail" style="margin-left:6px;font-weight:400;opacity:0.7;"></span>
     </div>
     <div style="flex:1"></div>
     <div class="stat-section" style="flex:0 0 auto;">
@@ -452,9 +461,46 @@ function worstAspect(row, rowSum, side, totalArea, availableExtent) {
 // ── Rendering ──────────────────────────────────────────────────────────
 
 let data = [];
+let vintage = {};
 let rects = [];
 let hovered = null;
 let searchQuery = "";
+
+function updateVintageBadge() {
+  const v = vintage[colorMode];
+  const lab = document.getElementById("vintageLabel");
+  const det = document.getElementById("vintageDetail");
+  if (!v) { lab.textContent = "—"; det.textContent = ""; return; }
+  lab.textContent = v.label;
+  det.textContent = v.detail;
+}
+
+function renderVintageTable() {
+  const order = ["jobs", "outlook", "pay", "education",
+                 "exposure_complementary", "exposure_substitutable",
+                 "exposure", "dof_risk_tier"];
+  const pretty = {
+    jobs: "Employment count",
+    outlook: "5-yr growth",
+    pay: "Median pay",
+    education: "Education tier",
+    exposure_complementary: "AI complementary",
+    exposure_substitutable: "AI substitutable",
+    exposure: "AI exposure (max)",
+    dof_risk_tier: "DoF risk tier",
+  };
+  const rows = order.map(k => {
+    const v = vintage[k];
+    if (!v) return "";
+    return `<div style="display:grid;grid-template-columns:140px 130px 1fr;gap:10px;">
+              <span style="color:var(--fg);">${pretty[k]}</span>
+              <span style="color:var(--fg2);font-family:'SF Mono',monospace;font-size:11px;">${v.label}</span>
+              <span style="color:var(--fg2);">${v.detail}</span>
+            </div>`;
+  }).join("");
+  const el = document.getElementById("vintageTable");
+  if (el) el.innerHTML = rows;
+}
 
 function tileMatches(d) {
   if (!searchQuery) return true;
@@ -585,14 +631,19 @@ function showTooltip(d, mx, my) {
   const tierBadge = d.dof_risk_tier
     ? `<span style="display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;background:${{high:'rgba(230,60,40,0.25)',medium:'rgba(220,170,40,0.22)',low:'rgba(50,180,80,0.22)'}[d.dof_risk_tier]||'rgba(128,128,128,0.2)'};color:${{high:'#ff8470',medium:'#e8c060',low:'#7adf90'}[d.dof_risk_tier]||'#aaa'};">${d.dof_risk_tier}</span>`
     : '\u2014';
+  // Compose label-with-vintage strings.
+  const vintLabel = (key, base) => {
+    const v = vintage[key];
+    return v ? `${base} <span style="opacity:0.5;font-size:10px;">${v.label}</span>` : base;
+  };
   tt.querySelector(".tt-stats").innerHTML = `
-    <span class="label">Median pay</span><span class="value">${formatPay(d.pay)}</span>
-    <span class="label">Jobs (2024)</span><span class="value">${formatNumber(d.jobs)}</span>
-    <span class="label">5-yr growth</span><span class="value">${d.outlook != null ? d.outlook + '%' : '\u2014'} ${d.outlook_desc ? '(' + d.outlook_desc + ')' : ''}</span>
-    <span class="label">Education</span><span class="value">${d.education || '\u2014'}</span>
-    <span class="label">AI complementary</span><span class="value">${d.exposure_complementary != null ? d.exposure_complementary + '/10' : '\u2014'}</span>
-    <span class="label">AI substitutable</span><span class="value">${d.exposure_substitutable != null ? d.exposure_substitutable + '/10' : '\u2014'}</span>
-    <span class="label">DoF risk tier</span><span class="value">${tierBadge}</span>`;
+    <span class="label">${vintLabel('pay','Median pay')}</span><span class="value">${formatPay(d.pay)}</span>
+    <span class="label">${vintLabel('jobs','Jobs')}</span><span class="value">${formatNumber(d.jobs)}</span>
+    <span class="label">${vintLabel('outlook','5-yr growth')}</span><span class="value">${d.outlook != null ? d.outlook + '%' : '\u2014'} ${d.outlook_desc ? '(' + d.outlook_desc + ')' : ''}</span>
+    <span class="label">${vintLabel('education','Education')}</span><span class="value">${d.education || '\u2014'}</span>
+    <span class="label">${vintLabel('exposure_complementary','AI complementary')}</span><span class="value">${d.exposure_complementary != null ? d.exposure_complementary + '/10' : '\u2014'}</span>
+    <span class="label">${vintLabel('exposure_substitutable','AI substitutable')}</span><span class="value">${d.exposure_substitutable != null ? d.exposure_substitutable + '/10' : '\u2014'}</span>
+    <span class="label">${vintLabel('dof_risk_tier','DoF risk tier')}</span><span class="value">${tierBadge}</span>`;
   const showRationale = colorMode === "exposure" || colorMode === "exposure_complementary" || colorMode === "exposure_substitutable";
   tt.querySelector(".tt-rationale").textContent = showRationale ? (d.exposure_rationale || "") : "";
   let tx = mx + 16, ty = my - 16;
@@ -1022,6 +1073,7 @@ document.getElementById("colorToggle").addEventListener("click", (e) => {
   btn.classList.add("active");
   updateStats();
   drawGradientLegend();
+  updateVintageBadge();
   draw();
   // Re-layout since stats height may have changed
   requestAnimationFrame(resize);
@@ -1051,9 +1103,18 @@ document.addEventListener("keydown", (e) => {
 fetch("data.json")
   .then(r => r.json())
   .then(d => {
-    data = d;
+    // Accept both shapes: legacy list, new {rows, vintage}.
+    if (Array.isArray(d)) {
+      data = d;
+      vintage = {};
+    } else {
+      data = d.rows || [];
+      vintage = d.vintage || {};
+    }
     updateStats();
     drawGradientLegend();
+    updateVintageBadge();
+    renderVintageTable();
     resize();
   });
 

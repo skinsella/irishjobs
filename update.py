@@ -40,8 +40,15 @@ REPO = Path(__file__).resolve().parent
 RAW = REPO / "raw"
 SCRIPTS = REPO / "scripts"
 
-NSB_URL = "https://a.storyblok.com/f/70398/x/893ebacfd9/national-skills-bulletin-2025.pdf"
-NSB_PDF = RAW / "nsb_2025.pdf"
+# NSB URL is discovered dynamically — see scripts/_nsb_paths.py. The
+# 2025 URL below is only the fallback when the SOLAS landing page can't
+# be scraped (e.g. CI without network access to solas.ie).
+NSB_FALLBACK_URL = "https://a.storyblok.com/f/70398/x/893ebacfd9/national-skills-bulletin-2025.pdf"
+NSB_FALLBACK_PDF = RAW / "nsb_2025.pdf"
+
+import sys as _sys
+_sys.path.insert(0, str(SCRIPTS))
+from _nsb_paths import discover_latest_nsb_url, latest_local_nsb
 
 
 def sha256(path: Path) -> str:
@@ -51,23 +58,44 @@ def sha256(path: Path) -> str:
 
 
 def refresh_pdf(force: bool) -> bool:
-    """Return True if the PDF was (re-)downloaded."""
-    if NSB_PDF.exists() and not force:
-        old_size = NSB_PDF.stat().st_size
-        try:
-            r = httpx.head(NSB_URL, timeout=20, follow_redirects=True)
-            new_size = int(r.headers.get("content-length", "0"))
-            if new_size and new_size == old_size:
-                print(f"  NSB PDF unchanged ({old_size:,} bytes)")
-                return False
-        except Exception as e:
-            print(f"  (HEAD failed: {e}; re-downloading just in case)")
-    print(f"  GET {NSB_URL}")
-    r = httpx.get(NSB_URL, timeout=120, follow_redirects=True)
+    """Discover the latest NSB on the SOLAS site, compare to what's in
+    raw/, and download if a newer year is available or the cached file
+    is missing. Returns True if the PDF was (re-)downloaded.
+    """
+    RAW.mkdir(parents=True, exist_ok=True)
+
+    discovered = discover_latest_nsb_url()
+    if discovered is None:
+        print("  (could not scrape SOLAS landing page; falling back to 2025 URL)")
+        url, year = NSB_FALLBACK_URL, 2025
+    else:
+        url, year = discovered
+        print(f"  Latest NSB on SOLAS: NSB {year}")
+
+    target = RAW / f"nsb_{year}.pdf"
+
+    # Determine if download is needed.
+    try:
+        local = latest_local_nsb()
+        local_year = int(local.stem.split("_")[1])
+    except FileNotFoundError:
+        local = None
+        local_year = -1
+
+    # Storyblok regenerates the URL hash on every upload, so if discovery
+    # returned a URL whose corresponding nsb_<year>.pdf already exists in
+    # raw/ and is the latest local year, there is no work to do.
+    if target.exists() and year <= local_year and not force:
+        print(f"  NSB {year} already cached ({target.stat().st_size:,} bytes)")
+        return False
+
+    if year > local_year and local_year > 0:
+        print(f"  NEW NSB EDITION available: {year} > cached {local_year}")
+    print(f"  GET {url}")
+    r = httpx.get(url, timeout=120, follow_redirects=True)
     r.raise_for_status()
-    NSB_PDF.parent.mkdir(parents=True, exist_ok=True)
-    NSB_PDF.write_bytes(r.content)
-    print(f"  → {NSB_PDF.relative_to(REPO)} ({len(r.content):,} bytes)")
+    target.write_bytes(r.content)
+    print(f"  → {target.relative_to(REPO)} ({len(r.content):,} bytes)")
     return True
 
 

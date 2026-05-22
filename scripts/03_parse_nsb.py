@@ -24,9 +24,12 @@ import re
 from pathlib import Path
 
 import pdfplumber
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _nsb_paths import latest_local_nsb
 
 REPO = Path(__file__).resolve().parent.parent
-PDF = REPO / "raw" / "nsb_2025.pdf"
+PDF = latest_local_nsb()
 INDEX = REPO / "occupations.json"
 OUT_DIR = REPO / "pages"
 
