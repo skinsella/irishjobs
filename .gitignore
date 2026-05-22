@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Secrets — match anything env-shaped so TextEdit RTF saves can't slip through
+.env
+*.env
+*.env.rtf
+api.env*
+api-keys*
+*.key
+secrets/

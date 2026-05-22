@@ -1,0 +1,12 @@
+[project]
+name = "ireland-jobs"
+version = "0.1.0"
+description = "Irish job market visualiser — port of karpathy/jobs to CSO + SOLAS NSB data"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "httpx>=0.28.1",
+    "pdfplumber>=0.11.4",
+    "python-dotenv>=1.2.2",
+]

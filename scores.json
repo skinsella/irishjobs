@@ -1,0 +1,602 @@
+[
+  {
+    "slug": "chemical-biological-physical-scientists",
+    "title": "Chemical, biological & physical scientists",
+    "exposure": 7,
+    "rationale": "This occupation involves heavy knowledge work, data analysis, and technical report writing, all of which are highly susceptible to AI augmentation and automation. While laboratory work and physical R&D provide a buffer, the rapid integration of AI in drug discovery, predictive modeling, and automated data processing significantly reshapes the core workflow and increases individual productivity."
+  },
+  {
+    "slug": "environmental-conservation-specialists",
+    "title": "Environmental/conservation specialists",
+    "exposure": 5,
+    "rationale": "This occupation involves a significant mix of digital knowledge work (data analysis, report writing, and regulatory compliance) and physical, site-based activities (field inspections, waste management oversight, and environmental sampling). While AI will substantially enhance their ability to model environmental data and automate technical reporting, the core requirement for physical presence in unpredictable environments and human-centric management of waste and energy facilities limits its total exposure."
+  },
+  {
+    "slug": "health-and-safety-officers",
+    "title": "Health and safety officers",
+    "exposure": 5,
+    "rationale": "Health and safety officers perform a mix of digital knowledge work (risk assessments, report writing, and regulatory monitoring) and essential physical work (site inspections, hazard identification, and emergency response). While AI can significantly automate the analysis of safety data and the drafting of compliance documentation, the core requirement for real-world physical presence and human judgment in unpredictable industrial environments limits its total exposure."
+  },
+  {
+    "slug": "other-engineering-professionals",
+    "title": "Other engineering professionals",
+    "exposure": 7,
+    "rationale": "These engineering roles involve heavy digital workloads in design, simulation, and data analysis where AI tools (like generative design and automated code generation) significantly boost productivity. While the 'Industry' context implies a connection to physical assets and manufacturing, the core work of these professionals is predominantly knowledge-based and increasingly performed via computer-aided engineering (CAE) platforms."
+  },
+  {
+    "slug": "production-managers-in-manufacturing",
+    "title": "Production managers in manufacturing",
+    "exposure": 6,
+    "rationale": "Production managers perform a mix of digital knowledge work (scheduling, resource planning, and data analysis) and physical oversight of manufacturing facilities. While AI can significantly automate supply chain optimization and predictive maintenance scheduling, the role still requires physical presence for troubleshooting, safety management, and high-stakes interpersonal leadership on the factory floor."
+  },
+  {
+    "slug": "production-design-qc-engineers",
+    "title": "Production, design & QC engineers",
+    "exposure": 7,
+    "rationale": "These roles are predominantly knowledge-based and digital, involving design, data analysis, and regulatory documentation which are highly susceptible to AI augmentation. While physical presence in factories or labs provides a partial buffer, AI is rapidly automating core tasks like CAD modeling, predictive quality control, and the generation of complex regulatory reports."
+  },
+  {
+    "slug": "science-engineering-technicians",
+    "title": "Science & engineering technicians",
+    "exposure": 5,
+    "rationale": "This occupation involves a significant mix of physical laboratory/technical work and digital data processing. While AI can automate data analysis, quality assurance reporting, and process planning, the core functions require physical presence for equipment maintenance, sample handling, and manual testing in industrial and R&D environments."
+  },
+  {
+    "slug": "ict-professionals-n-e-c",
+    "title": "ICT professionals n.e.c.",
+    "exposure": 8,
+    "rationale": "This occupational group consists of purely digital roles\u2014such as IT business analysts, web developers, and systems architects\u2014where the core work product is code, data, and digital documentation. AI is already significantly automating routine coding, UI/UX design, and data analysis, and while it creates new demand for security and AI-integration skills, it fundamentally restructures how these professionals produce their work."
+  },
+  {
+    "slug": "ict-specialist-project-managers",
+    "title": "ICT specialist & project managers",
+    "exposure": 8,
+    "rationale": "This occupation is almost entirely digital, involving the management, analysis, and direction of IT systems and projects which can be performed remotely. AI is rapidly automating core tasks such as project scheduling, technical documentation, and performance analytics, while also significantly increasing the productivity of the technical teams these managers oversee."
+  },
+  {
+    "slug": "it-technicians",
+    "title": "IT technicians",
+    "exposure": 8,
+    "rationale": "IT technicians, particularly those in user support and operations, are highly exposed because their core tasks involve troubleshooting, routine system maintenance, and answering technical queries\u2014all of which are being rapidly automated by AI-driven help desks and self-healing systems. While some physical hardware intervention remains, the shift toward remote support and digital infrastructure means the majority of the role is susceptible to significant productivity gains or displacement by AI."
+  },
+  {
+    "slug": "programmers-software-developers",
+    "title": "Programmers & software developers",
+    "exposure": 9,
+    "rationale": "Software development is a fully digital occupation where core tasks\u2014coding, debugging, and architectural design\u2014are being rapidly transformed by Large Language Models and AI coding assistants. While senior roles still require high-level human judgment and system oversight, the occupation faces significant restructuring as AI drastically increases individual productivity and automates many routine programming tasks."
+  },
+  {
+    "slug": "accountants-tax-experts",
+    "title": "Accountants & tax experts",
+    "exposure": 8,
+    "rationale": "Accountancy and tax expertise are fundamentally digital knowledge-work occupations involving data analysis, regulatory compliance, and reporting\u2014all domains where AI is rapidly advancing. The report explicitly notes that AI is likely to play a 'transformational role' and could lead to a long-term decline in employment numbers as routine information processing and complex calculations are automated."
+  },
+  {
+    "slug": "actuaries-economists-statisticians-other-business-professionals",
+    "title": "Actuaries, economists & statisticians; other business professionals",
+    "exposure": 9,
+    "rationale": "This occupation is almost entirely digital, involving data analysis, economic modeling, and statistical reporting\u2014tasks where LLMs and specialized AI excel. The core work products (code, reports, and forecasts) are highly susceptible to automation, and the report already identifies AI and machine learning as critical technical shifts for these roles."
+  },
+  {
+    "slug": "financial-accounts-managers",
+    "title": "Financial accounts managers",
+    "exposure": 8,
+    "rationale": "Financial accounts managers perform work that is almost entirely digital, involving the analysis, reporting, and management of financial data which is highly susceptible to AI automation. The sector context explicitly notes that AI and machine learning are being integrated to improve customer experience and fraud detection, while the core tasks of data visualization and financial reporting are increasingly handled by sophisticated AI-driven software."
+  },
+  {
+    "slug": "financial-administrative-occupations",
+    "title": "Financial administrative occupations",
+    "exposure": 9,
+    "rationale": "This occupation consists of routine, digital information-processing tasks such as bookkeeping, payroll, and credit control, which are highly susceptible to AI automation. The work is performed entirely on computers and involves structured data, a domain where AI and robotic process automation (RPA) are already highly capable of replacing human labor."
+  },
+  {
+    "slug": "financial-analysts-insurance-underwriters",
+    "title": "Financial analysts & insurance underwriters",
+    "exposure": 8,
+    "rationale": "The core tasks of financial analysts and underwriters\u2014data synthesis, risk assessment, and financial modeling\u2014are fundamentally digital and involve high-volume information processing. AI and machine learning are already being integrated into these roles for fraud detection and risk evaluation, significantly automating the analytical heavy lifting that previously required human intervention."
+  },
+  {
+    "slug": "financial-managers-directors",
+    "title": "Financial managers & directors",
+    "exposure": 7,
+    "rationale": "This occupation is predominantly digital and knowledge-based, involving financial analysis, reporting, and strategic decision-making that can be significantly enhanced by AI and automation. While the role requires high-level human judgment, leadership, and regulatory oversight, the core work product is information-driven, making it highly susceptible to productivity shifts and restructuring as AI tools take over complex data processing and fraud detection."
+  },
+  {
+    "slug": "hr-managers-officers",
+    "title": "HR managers & officers",
+    "exposure": 7,
+    "rationale": "HR roles are predominantly knowledge-based and digital, involving significant amounts of writing, data analysis, and communication that are highly susceptible to AI augmentation. While core functions like employee relations and conflict resolution require human empathy and judgment, AI is rapidly automating recruitment (talent acquisition), performance management, and administrative compliance, significantly increasing individual productivity and restructuring the occupation."
+  },
+  {
+    "slug": "mgt-consultants-business-analysts-project-managers",
+    "title": "Mgt. consultants, business analysts & project managers",
+    "exposure": 8,
+    "rationale": "This occupation is almost entirely digital and knowledge-based, involving data analysis, report writing, and strategic communication which are core strengths of generative AI. While high-level stakeholder management and leadership provide a buffer, the automation of data synthesis and project tracking will significantly restructure the role and increase individual productivity to the point of reducing total labor demand."
+  },
+  {
+    "slug": "other-business-associate-professionals",
+    "title": "Other business associate professionals",
+    "exposure": 8,
+    "rationale": "This group consists of digital-first knowledge workers such as accounting technicians, data analysts, and estimators whose core tasks involve processing, analyzing, and reporting on structured data. The inclusion of 'AI safety annotators' and the high demand for data visualization and analysis skills signal that these roles are already deeply integrated with and being restructured by AI technologies."
+  },
+  {
+    "slug": "health-associate-professionals",
+    "title": "Health associate professionals",
+    "exposure": 4,
+    "rationale": "This occupation group involves a significant amount of physical, hands-on work and real-time human interaction, such as emergency response (paramedics), clinical assistance (dental nurses), and technical lab work. While AI will heavily assist in diagnostic analysis, pharmaceutical calculations, and administrative tasks, the core requirement for physical presence and manual dexterity in healthcare settings provides a substantial buffer against full automation."
+  },
+  {
+    "slug": "medical-practitioners",
+    "title": "Medical practitioners",
+    "exposure": 5,
+    "rationale": "Medical practitioners perform a mix of high-level knowledge work and essential physical/interpersonal tasks. While AI is rapidly advancing in diagnostic analysis, imaging, and administrative documentation, the core of the role requires physical examinations, complex surgical procedures, and high-stakes human empathy that cannot be fully digitized."
+  },
+  {
+    "slug": "nurses-midwives",
+    "title": "Nurses & midwives",
+    "exposure": 4,
+    "rationale": "The core of nursing and midwifery involves physical patient care, manual dexterity, and real-time emotional support, which are highly resistant to AI automation. However, AI will significantly impact the knowledge-work components of the role, such as patient monitoring, diagnostic assistance, and administrative documentation, leading to moderate overall exposure."
+  },
+  {
+    "slug": "other-healthcare-professionals",
+    "title": "Other healthcare professionals",
+    "exposure": 4,
+    "rationale": "This group consists of highly skilled professionals whose core work involves physical procedures (dentistry, optometry, podiatry) or complex interpersonal clinical judgment (psychology, management). While AI will significantly enhance diagnostic accuracy in fields like radiography and pharmacy, the requirement for physical presence, manual dexterity, and high-stakes human interaction provides a substantial buffer against full automation."
+  },
+  {
+    "slug": "therapy-professionals",
+    "title": "Therapy professionals",
+    "exposure": 3,
+    "rationale": "The core of these roles involves physical manipulation (physiotherapy), tactile assessment, and real-time interpersonal interaction in clinical or educational settings. While AI can assist with diagnostic analysis, treatment planning, and administrative documentation, the physical and empathetic nature of the work provides a significant barrier to automation."
+  },
+  {
+    "slug": "educational-support-assistants",
+    "title": "Educational support assistants",
+    "exposure": 3,
+    "rationale": "The core of this role involves physical presence and interpersonal support, particularly for special needs education which requires high levels of empathy and real-time physical assistance. While AI can assist with administrative tasks or personalized learning materials, the fundamental requirement for human supervision and physical intervention in a classroom setting limits its overall exposure."
+  },
+  {
+    "slug": "higher-further-education-teaching-professionals",
+    "title": "Higher & further education teaching professionals",
+    "exposure": 7,
+    "rationale": "This occupation is predominantly knowledge-based, involving research, curriculum design, and the synthesis of complex information\u2014all areas where AI is highly capable. While the physical presence for lecturing and the interpersonal mentorship of students provide a buffer, the core 'work products' (lectures, assessments, and research papers) are digital and highly susceptible to AI-driven productivity gains and restructuring."
+  },
+  {
+    "slug": "primary-nursery-teachers",
+    "title": "Primary & nursery teachers",
+    "exposure": 6,
+    "rationale": "Primary and nursery teaching requires significant physical presence, emotional intelligence, and real-time classroom management, which provides a buffer against full automation. However, AI will highly expose the knowledge-work components of the role, such as lesson planning, personalized curriculum generation, and administrative reporting, significantly increasing individual teacher productivity."
+  },
+  {
+    "slug": "secondary-teachers",
+    "title": "Secondary teachers",
+    "exposure": 6,
+    "rationale": "Secondary teaching is a hybrid of knowledge work and real-time human interaction. While AI can heavily automate lesson planning, grading, and content creation (digital tasks), the core of the job requires physical presence, classroom management, and social-emotional support that AI cannot yet replicate. The exposure is high because AI will significantly increase teacher productivity and change how subjects like coding, writing, and math are taught, but the physical and interpersonal nature of schooling provides a protective barrier."
+  },
+  {
+    "slug": "teaching-other-educational-professionals",
+    "title": "Teaching & other educational professionals",
+    "exposure": 6,
+    "rationale": "This group involves significant knowledge work, curriculum design, and administrative tasks that are highly susceptible to AI augmentation and automation. However, the core of the role\u2014particularly for special education teachers and school principals\u2014requires high-stakes human judgment, emotional intelligence, and physical presence in a classroom environment, which serves as a buffer against full automation."
+  },
+  {
+    "slug": "trainers-instructors-career-guidance",
+    "title": "Trainers & instructors, career guidance",
+    "exposure": 6,
+    "rationale": "This occupation is a hybrid of digital knowledge work and high-stakes interpersonal interaction. While AI can automate lesson planning, career path analysis, and personalized tutoring, the core functions\u2014driving instruction, vocational training, and career counseling\u2014require significant human empathy, physical presence, and real-time adaptability that provide a buffer against full automation."
+  },
+  {
+    "slug": "care-workers-home-carers-etc",
+    "title": "Care workers, home carers, etc.",
+    "exposure": 2,
+    "rationale": "The core of this occupation involves physical assistance, personal care, and emotional support in residential or home settings, which are tasks AI cannot perform. While AI may assist with peripheral administrative tasks like scheduling or care logging, the high demand for human presence and the physical nature of the work provide a strong barrier to automation."
+  },
+  {
+    "slug": "childminders-etc",
+    "title": "Childminders etc.",
+    "exposure": 2,
+    "rationale": "The core of this occupation involves physical care, supervision, and emotional interaction with children in a real-world environment, which AI cannot replicate. While AI might assist with peripheral administrative tasks or educational planning, the fundamental requirement for human presence and safety monitoring creates a strong barrier to automation."
+  },
+  {
+    "slug": "other-caring-services",
+    "title": "Other caring services",
+    "exposure": 2,
+    "rationale": "The core tasks of nursing auxiliaries, ambulance staff, and mortuary assistants are fundamentally physical and require real-time human presence in unpredictable environments. AI exposure is limited to peripheral administrative tasks like scheduling or digital record-keeping, while the essential duties of physical care, emergency response, and manual handling remain shielded from automation."
+  },
+  {
+    "slug": "social-workers-welfare-professionals",
+    "title": "Social workers & welfare professionals",
+    "exposure": 4,
+    "rationale": "The core of social work and welfare involves high-stakes human judgment, complex interpersonal relationships, and physical presence in community or domestic settings. While AI can significantly streamline administrative tasks, case documentation, and data-driven risk assessment, the essential functions of empathy, ethical decision-making, and crisis intervention remain resistant to automation."
+  },
+  {
+    "slug": "welfare-housing-associate-professionals",
+    "title": "Welfare & housing associate professionals",
+    "exposure": 4,
+    "rationale": "This occupation involves a significant amount of interpersonal work, such as counseling, youth community engagement, and housing support, which requires high emotional intelligence and physical presence. While AI can substantially assist with the administrative and knowledge-based components (e.g., case documentation, resource matching, and policy analysis), the core functions rely on human-to-human trust and navigating complex social environments."
+  },
+  {
+    "slug": "barristers-judges-solicitors-related-professionals",
+    "title": "Barristers, judges, solicitors & related professionals",
+    "exposure": 8,
+    "rationale": "The core work of legal professionals\u2014researching case law, drafting contracts, and analyzing complex documents\u2014is fundamentally digital and information-based, making it highly susceptible to AI automation and augmentation. While courtroom advocacy and judicial decision-making require human presence and high-level judgment, the vast majority of billable hours in solicitors' and barristers' practices involve tasks where LLMs are rapidly reaching or exceeding human proficiency."
+  },
+  {
+    "slug": "other-protective-service-occupations",
+    "title": "Other protective service occupations",
+    "exposure": 3,
+    "rationale": "The core responsibilities of armed forces, fire, and prison officers require physical presence, manual intervention, and real-time human interaction in unpredictable environments. While AI can assist with peripheral tasks like surveillance analysis, logistics, and administrative reporting, it cannot replace the essential physical and interpersonal nature of protective services."
+  },
+  {
+    "slug": "police-officers-e-g-garda",
+    "title": "Police officers (e.g. Garda\u00ed)",
+    "exposure": 4,
+    "rationale": "The core of policing requires physical presence, real-world intervention, and complex interpersonal interactions that AI cannot replicate. However, AI will significantly impact the information-processing aspects of the role, such as evidence analysis, report writing, and surveillance monitoring, leading to moderate exposure through enhanced productivity in administrative and investigative tasks."
+  },
+  {
+    "slug": "security-guards",
+    "title": "Security guards",
+    "exposure": 3,
+    "rationale": "The core of this occupation requires physical presence, patrolling, and real-time human intervention in unpredictable environments, which provides a natural barrier to AI. However, AI exposure is present through the automation of monitoring tasks (AI-powered surveillance and facial recognition) and administrative duties like incident reporting, which may reduce the total number of guards needed for passive observation."
+  },
+  {
+    "slug": "architects-town-planners-architectural-technologists-surveyors",
+    "title": "Architects & town planners, architectural technologists & surveyors",
+    "exposure": 7,
+    "rationale": "This occupation is predominantly knowledge-based and digital, involving design, data analysis, and regulatory compliance which are highly susceptible to AI-driven productivity gains in CAD, BIM, and automated quantity surveying. While it requires some site visits and stakeholder management, the core work products\u2014plans, costings, and technical specifications\u2014are increasingly generated and optimized through sophisticated software and generative design tools."
+  },
+  {
+    "slug": "bricklayers-plasterers",
+    "title": "Bricklayers & plasterers",
+    "exposure": 1,
+    "rationale": "Bricklaying and plastering are highly manual, physical trades performed in unpredictable, real-world environments that require fine motor skills and spatial reasoning. While AI might marginally improve project scheduling or supply chain logistics, the core tasks of the job are currently beyond the reach of AI and robotics in a way that would significantly reshape the occupation."
+  },
+  {
+    "slug": "carpenters-joiners",
+    "title": "Carpenters & joiners",
+    "exposure": 2,
+    "rationale": "The core work of carpenters and joiners is physical and manual, requiring real-time presence in unpredictable environments to install and craft structures. While AI and digital transformation (like BIM and Modern Methods of Construction) may assist with planning, scheduling, and off-site manufacturing logistics, the physical execution of the trade remains a natural barrier to automation."
+  },
+  {
+    "slug": "civil-engineers-construction-project-managers",
+    "title": "Civil engineers & construction project managers",
+    "exposure": 5,
+    "rationale": "This occupation involves a significant mix of digital knowledge work (design, BIM, data analysis, and scheduling) and physical site presence for quality control and project management. While AI will substantially automate technical tasks like structural analysis and logistics optimization, the requirement for real-time human judgment in unpredictable physical environments and the management of diverse labor teams provides a natural buffer against full automation."
+  },
+  {
+    "slug": "construction-operatives-elementary",
+    "title": "Construction operatives & elementary",
+    "exposure": 2,
+    "rationale": "The core duties of scaffolders, road workers, and rail operatives are heavily physical and performed in unpredictable outdoor environments, providing a strong natural barrier to AI automation. While 'modern methods of construction' and digital transformation are mentioned, these primarily affect peripheral tasks like scheduling, logistics, and safety reporting rather than the manual labor itself."
+  },
+  {
+    "slug": "construction-related-technicians",
+    "title": "Construction related technicians",
+    "exposure": 8,
+    "rationale": "This group, which includes draughtspersons and CAD/BIM technicians, performs work that is almost entirely digital and centered on technical design and data modeling. AI is rapidly advancing in automated plan generation, structural optimization, and the conversion of conceptual sketches into detailed BIM models, significantly increasing the productivity ceiling and potentially reducing the headcount needed for routine drafting tasks."
+  },
+  {
+    "slug": "other-construction-trades",
+    "title": "Other construction trades",
+    "exposure": 1,
+    "rationale": "The core tasks of these trades\u2014such as roofing, steel erection, glazing, and tiling\u2014are fundamentally physical and occur in unpredictable, non-standardized outdoor environments. While AI may assist with peripheral administrative tasks or digital planning (BIM), it cannot replace the manual dexterity and real-time physical problem-solving required for the primary work."
+  },
+  {
+    "slug": "painters-decorators",
+    "title": "Painters & decorators",
+    "exposure": 1,
+    "rationale": "The core work of painters and decorators is almost entirely physical, requiring manual dexterity and real-time presence in unpredictable, non-standardized environments. While AI might assist with peripheral administrative tasks or digital color visualization, it cannot perform the physical application of materials or the surface preparation required for the job."
+  },
+  {
+    "slug": "plumbers",
+    "title": "Plumbers",
+    "exposure": 2,
+    "rationale": "Plumbing is a highly physical occupation requiring manual dexterity and real-time problem-solving in unpredictable, non-digital environments. While AI may assist with peripheral tasks like scheduling, energy-efficiency calculations, or regulatory compliance, the core work of installing and repairing physical infrastructure remains insulated from automation."
+  },
+  {
+    "slug": "butchers-fishmongers-bakers-etc",
+    "title": "Butchers, fishmongers, bakers etc.",
+    "exposure": 2,
+    "rationale": "The core tasks of butchers, fishmongers, and bakers are heavily physical and manual, requiring sensory judgment and hand-eye coordination in non-standardized environments. While AI may assist with peripheral business tasks like inventory management or demand forecasting, the fundamental work of processing food products remains resistant to digital automation."
+  },
+  {
+    "slug": "electrical-electronic-trades-etc",
+    "title": "Electrical & electronic trades etc.",
+    "exposure": 3,
+    "rationale": "The core tasks of electricians, telecommunications engineers, and electrical fitters are predominantly physical, involving on-site installation, maintenance, and repair of hardware in unpredictable environments. While AI will assist with peripheral tasks like diagnostics, reading digital drawings, and managing programmable logic controllers (PLCs), the requirement for manual dexterity and physical presence creates a significant barrier to automation."
+  },
+  {
+    "slug": "other-metal-related-trades",
+    "title": "Other metal-related trades",
+    "exposure": 3,
+    "rationale": "The core tasks of this group\u2014such as pipe fitting, sheet metal work, and refrigeration engineering\u2014are fundamentally physical and require real-time presence in unpredictable environments. While AI and digitalization are impacting peripheral tasks like reading digital drawings and programming CNC machines, the physical manipulation of materials and on-site problem solving provide a strong barrier to automation."
+  },
+  {
+    "slug": "other-skilled-trades",
+    "title": "Other skilled trades",
+    "exposure": 3,
+    "rationale": "The core tasks of these occupations\u2014such as welding, furniture making, tailoring, and electrical installation\u2014are fundamentally physical and require manual dexterity in non-routine environments. While AI and digitalization are increasingly used for peripheral tasks like reading digital drawings, CNC programming, or vehicle diagnostics, the primary work product cannot be digitized or automated by AI alone."
+  },
+  {
+    "slug": "vehicle-trades",
+    "title": "Vehicle trades",
+    "exposure": 3,
+    "rationale": "The core tasks of vehicle trades\u2014repairing engines, bodywork, and aircraft maintenance\u2014are fundamentally physical and require manual dexterity in unpredictable environments. While AI will enhance diagnostic software and digital record-keeping, it cannot perform the physical labor of replacing parts or repairing structural damage."
+  },
+  {
+    "slug": "welding-and-fabricators",
+    "title": "Welding and fabricators",
+    "exposure": 3,
+    "rationale": "Welding and fabrication are primarily physical, manual trades requiring presence in construction or industrial environments. While AI and robotics are advancing in automated manufacturing (e.g., CNC and orbital welding), a significant portion of the work involves bespoke onsite tasks, complex physical maneuvers, and real-time human judgment in unpredictable settings that remain difficult to fully automate."
+  },
+  {
+    "slug": "animal-carers",
+    "title": "Animal carers",
+    "exposure": 4,
+    "rationale": "This occupation involves a significant amount of physical labor, manual dexterity, and real-time interaction with animals (grooming, nursing, pest control) that AI cannot replicate. However, the inclusion of veterinarians and veterinary nurses introduces a knowledge-work component where AI can substantially assist in diagnostics, medical imaging analysis, and treatment planning, leading to moderate overall exposure."
+  },
+  {
+    "slug": "elementary-agriculture-occupations",
+    "title": "Elementary agriculture occupations",
+    "exposure": 2,
+    "rationale": "The core tasks of farm, forestry, and horse racing workers are predominantly physical and conducted in unpredictable outdoor environments, which provides a strong natural barrier to AI. While the report mentions that automated processes (like robotics in dairy or harvesting) could reduce personnel needs, these are hardware-centric technologies rather than direct AI software exposure, leaving the day-to-day manual labor largely insulated from digital disruption."
+  },
+  {
+    "slug": "farmers",
+    "title": "Farmers",
+    "exposure": 3,
+    "rationale": "Farming is primarily a physical occupation requiring manual labor and presence in unpredictable outdoor environments, which provides a natural barrier to AI. While AI can assist with peripheral tasks like climate data analysis, crop monitoring, and administrative compliance, the core work remains hands-on and tied to physical assets."
+  },
+  {
+    "slug": "horticultural-agricultural-fishing-trades-n-e-c",
+    "title": "Horticultural, agricultural & fishing trades n.e.c.",
+    "exposure": 2,
+    "rationale": "The core tasks of gardeners, groundsmen, and agricultural trades are predominantly physical and require real-time presence in unpredictable outdoor environments. While AI may assist with peripheral administrative tasks or climate-related data analysis, the manual nature of horticulture and animal care provides a significant natural barrier to automation."
+  },
+  {
+    "slug": "managers-in-horticulture-agriculture-fishing",
+    "title": "Managers in horticulture, agriculture & fishing",
+    "exposure": 4,
+    "rationale": "While these managers perform knowledge-based tasks like strategic planning, resource allocation, and regulatory compliance that AI can optimize, the role is anchored in the physical management of biological assets and unpredictable environments. A significant portion of the job requires on-site presence, physical inspections, and real-world human interaction, which limits the potential for full automation."
+  },
+  {
+    "slug": "bar-staff",
+    "title": "Bar staff",
+    "exposure": 2,
+    "rationale": "The core duties of bar staff involve physical dexterity, manual labor, and real-time social interaction in a dynamic environment, which are difficult for AI to replicate. While AI can assist with peripheral tasks like inventory management or automated ordering systems, the primary value of the role remains rooted in physical presence and human service."
+  },
+  {
+    "slug": "catering-bar-managers",
+    "title": "Catering & bar managers",
+    "exposure": 3,
+    "rationale": "The core of this role involves physical presence, real-time human interaction, and the management of staff and inventory in a tangible environment. While AI can streamline administrative tasks like scheduling, procurement, and financial reporting, it cannot replace the essential interpersonal leadership and physical oversight required to manage a bar or catering event."
+  },
+  {
+    "slug": "chefs-cooks",
+    "title": "Chefs & cooks",
+    "exposure": 2,
+    "rationale": "The core tasks of chefs and cooks are inherently physical, requiring manual dexterity, sensory judgment (taste/smell), and real-time adaptation in a high-pressure physical environment. While AI may assist with peripheral administrative tasks like menu optimization, inventory management, or recipe generation, the primary work product cannot be digitized or automated without significant advances in robotics."
+  },
+  {
+    "slug": "hospitality-managers",
+    "title": "Hospitality managers",
+    "exposure": 4,
+    "rationale": "Hospitality management involves a significant amount of physical presence, real-time problem solving, and interpersonal interaction with staff and guests that AI cannot replicate. While AI can automate administrative and digital tasks like inventory management, scheduling, and dynamic pricing, the core of the role remains rooted in the physical environment of hotels and restaurants."
+  },
+  {
+    "slug": "housekeepers-etc",
+    "title": "Housekeepers etc.",
+    "exposure": 2,
+    "rationale": "The core work of housekeepers is fundamentally physical, involving manual cleaning and maintenance of physical environments that AI cannot perform. While AI may assist managers with scheduling or inventory tracking, the primary labor requires human presence and dexterity in unpredictable, non-digital settings."
+  },
+  {
+    "slug": "kitchen-catering-assistants",
+    "title": "Kitchen & catering assistants",
+    "exposure": 2,
+    "rationale": "The core duties of kitchen and catering assistants involve physical labor, manual dexterity, and real-time presence in a high-intensity environment (cleaning, food prep, and portering). While AI and robotics may eventually automate some food preparation, the current cost and complexity of deploying such hardware in diverse kitchen settings make the occupation's exposure very low compared to digital roles."
+  },
+  {
+    "slug": "waiters-waitresses",
+    "title": "Waiters & waitresses",
+    "exposure": 2,
+    "rationale": "The core of the role involves physical tasks such as carrying food, clearing tables, and navigating unpredictable dining environments, which are difficult to automate with current robotics. While AI can assist with peripheral tasks like digital ordering, automated scheduling, or inventory management, the high demand for real-time human interaction and physical presence provides a strong barrier to significant AI displacement."
+  },
+  {
+    "slug": "artistic-literary-media-associate-professionals",
+    "title": "Artistic, literary & media associate professionals",
+    "exposure": 8,
+    "rationale": "This occupational group is heavily comprised of digital-first roles such as graphic designers, authors, translators, and animators, all of which are currently being disrupted by Generative AI. While some roles like dancers or actors require physical presence, the high concentration of third-level graduates (77%) and the digital nature of the core work products (writing, design, audio-visual) place this group at the forefront of AI-driven productivity shifts and task automation."
+  },
+  {
+    "slug": "hairdressers-beauticians-etc",
+    "title": "Hairdressers & beauticians, etc.",
+    "exposure": 2,
+    "rationale": "The core tasks of hairdressing and beauty therapy are inherently physical and require real-time human presence to perform manual procedures on a client's body. AI exposure is limited to peripheral administrative tasks like scheduling, marketing, and inventory management, while the primary service remains shielded by the need for physical dexterity and interpersonal interaction."
+  },
+  {
+    "slug": "leisure-travel-service-occupations",
+    "title": "Leisure & travel service occupations",
+    "exposure": 5,
+    "rationale": "This group is a hybrid of physical service roles (lifeguards, theme park attendants, air travel assistants) and digital-heavy roles (travel agents). While AI is rapidly automating travel planning and booking, the substantial physical presence required for safety, customer service, and manual operations in leisure and aviation provides a significant buffer against full automation."
+  },
+  {
+    "slug": "media-profs-librarians",
+    "title": "Media profs. & librarians",
+    "exposure": 8,
+    "rationale": "This occupational group consists almost entirely of digital knowledge work\u2014writing, editing, creative direction, and information management\u2014which aligns perfectly with the core strengths of generative AI. While curators and librarians maintain a physical/human element, the majority of roles (PR, advertising, and journalism) face significant restructuring as AI automates content creation, data synthesis, and media monitoring."
+  },
+  {
+    "slug": "sports-fitness-occupations",
+    "title": "Sports & fitness occupations",
+    "exposure": 3,
+    "rationale": "The core of this occupation involves physical presence, manual instruction, and real-time human interaction in a physical environment (coaching, playing sports, fitness instruction). While AI can assist with peripheral tasks like personalized training programs, performance analytics, and digital fitness platforms, it cannot replace the physical execution and interpersonal motivation central to the role."
+  },
+  {
+    "slug": "aircraft-pilots-ship-officers-air-traffic-controllers",
+    "title": "Aircraft pilots, ship officers, air traffic controllers",
+    "exposure": 6,
+    "rationale": "These roles involve high-stakes information processing and navigation in digital environments, where AI and automation are already deeply integrated into flight and maritime systems. While physical presence and human accountability remain critical for safety and regulatory reasons, AI is increasingly capable of handling complex route planning, real-time monitoring, and decision-support, significantly augmenting productivity and potentially reducing crew requirements over time."
+  },
+  {
+    "slug": "large-goods-vehicle-drivers",
+    "title": "Large goods vehicle drivers",
+    "exposure": 3,
+    "rationale": "While autonomous driving technology represents a long-term threat, the core of the job remains a physical, real-world task performed in unpredictable environments that require human presence for safety, loading, and navigation. AI currently impacts peripheral tasks like route optimization and fuel management, but the physical requirement of operating a large vehicle prevents high exposure in the immediate future."
+  },
+  {
+    "slug": "managers-directors-in-transport-logistics",
+    "title": "Managers & directors in transport & logistics",
+    "exposure": 7,
+    "rationale": "This occupation involves high-level digital tasks such as route planning, supply chain optimization, and logistics coordination, all of which are highly susceptible to AI-driven automation and predictive analytics. While it requires human judgment for crisis management and physical site oversight, the core functions of data analysis and resource allocation are increasingly handled by sophisticated AI tools, significantly increasing productivity and reducing the need for human intervention."
+  },
+  {
+    "slug": "mobile-machine-drivers-operatives",
+    "title": "Mobile machine drivers & operatives",
+    "exposure": 3,
+    "rationale": "The core work involves physical operation of heavy machinery in dynamic environments like construction sites, farms, and warehouses, which provides a significant buffer against pure AI software. While autonomous vehicle technology and AI-driven logistics optimization are emerging, the immediate impact is limited to peripheral tasks or highly controlled environments, leaving the primary manual and spatial navigation tasks to humans."
+  },
+  {
+    "slug": "other-drivers-transport-operatives",
+    "title": "Other drivers & transport operatives",
+    "exposure": 4,
+    "rationale": "While the core task of operating vehicles and vessels requires physical presence and real-time navigation in unpredictable environments, AI is increasingly automating peripheral tasks like route planning, fuel optimization, and logistics coordination. The long-term trajectory toward autonomous vehicles and drones represents a significant but currently constrained threat to the core manual labor of this occupation."
+  },
+  {
+    "slug": "stock-control-transport-distribution-administrative-occupations",
+    "title": "Stock control, transport & distribution administrative occupations",
+    "exposure": 8,
+    "rationale": "This occupation consists of routine administrative tasks\u2014such as stock taking, logistics coordination, and transport planning\u2014that are primarily digital and data-driven. AI and advanced algorithms are highly effective at optimizing supply chains, predicting inventory needs, and automating documentation, making these roles highly susceptible to significant restructuring and productivity-driven displacement."
+  },
+  {
+    "slug": "taxi-cab-drivers-chauffeurs",
+    "title": "Taxi/cab drivers & chauffeurs",
+    "exposure": 3,
+    "rationale": "While the core task of driving is physical and occurs in unpredictable real-world environments, the occupation is highly susceptible to indirect exposure through AI-driven routing, dispatching, and the long-term development of autonomous vehicle technology. However, current regulatory, safety, and infrastructure barriers in Ireland keep the immediate impact limited to peripheral digital tools rather than core task automation."
+  },
+  {
+    "slug": "elementary-administrative",
+    "title": "Elementary administrative",
+    "exposure": 6,
+    "rationale": "This group is a hybrid of physical logistics (postal workers, couriers) and routine digital tasks (elementary admin). While the physical delivery aspect remains insulated, the administrative and mail-sorting components are highly susceptible to AI-driven automation and digital displacement, as evidenced by the sector's existing trend of declining demand due to digitalization."
+  },
+  {
+    "slug": "government-administrative-occupations",
+    "title": "Government administrative occupations",
+    "exposure": 7,
+    "rationale": "This occupation is predominantly digital and knowledge-based, involving information processing, reporting, and communication that are highly susceptible to AI automation and augmentation. While the need for human judgment in policy and public service remains, the SOLAS report explicitly highlights that digitalization is already reducing routine tasks and necessitating significant upskilling in digital skills."
+  },
+  {
+    "slug": "office-managers-supervisors-administrative-occupations",
+    "title": "Office managers & supervisors administrative occupations",
+    "exposure": 7,
+    "rationale": "This occupation is predominantly digital and knowledge-based, involving coordination, scheduling, and information management which are highly susceptible to AI automation. While it requires human judgment and interpersonal management, AI tools are rapidly assuming the routine administrative, reporting, and organizational tasks that comprise the core of the role."
+  },
+  {
+    "slug": "other-administrators",
+    "title": "Other administrators",
+    "exposure": 9,
+    "rationale": "This occupation consists of purely digital and information-based tasks such as record-keeping, HR administration, and sales processing, which are highly susceptible to AI automation. The SOLAS report already notes that digitalization is reducing routine tasks, and since these roles are primarily computer-based with no physical labor requirement, they face significant restructuring as AI agents take over data management and communication workflows."
+  },
+  {
+    "slug": "pas-other-secretaries-etc",
+    "title": "PAs & other secretaries, etc.",
+    "exposure": 9,
+    "rationale": "This occupation consists almost entirely of digital information processing, including transcription, scheduling, and document preparation, which are core strengths of generative AI. The SOLAS report explicitly notes that digitalization is already reducing demand for these roles and that many retiring workers will not be replaced due to automation."
+  },
+  {
+    "slug": "receptionists",
+    "title": "Receptionists",
+    "exposure": 7,
+    "rationale": "Receptionists perform a mix of digital administrative tasks and in-person interaction, but the SOLAS report explicitly notes that digitalization and automation are already reducing demand for this role. While the physical presence for greeting visitors provides a partial buffer, AI-driven scheduling, virtual receptionists, and automated communication tools are rapidly absorbing the core information-processing components of the job."
+  },
+  {
+    "slug": "advertising-marketing-sales-directors",
+    "title": "Advertising, marketing & sales directors",
+    "exposure": 7,
+    "rationale": "This occupation is predominantly digital and knowledge-based, involving strategy, data analysis, and communication which are highly susceptible to AI augmentation. While the leadership and relationship-management aspects provide a buffer, AI is rapidly automating core tasks like market research, campaign optimization, and content generation, significantly increasing individual productivity and restructuring how marketing departments operate."
+  },
+  {
+    "slug": "business-sales-executives",
+    "title": "Business sales executives",
+    "exposure": 7,
+    "rationale": "Business sales executives perform predominantly digital and communicative knowledge work, such as lead generation, data analysis, and strategic outreach, which are highly susceptible to AI enhancement and automation. While high-level relationship management and complex negotiations provide a buffer, the increasing demand for digital and AI skills noted in the report suggests that core tasks are being rapidly reshaped by generative AI and automated CRM tools."
+  },
+  {
+    "slug": "customer-service-occupations",
+    "title": "Customer service occupations",
+    "exposure": 8,
+    "rationale": "This occupation is predominantly digital and communication-based, involving routine information processing and customer interaction that can be largely automated by Generative AI and advanced chatbots. The report explicitly identifies call center and customer service workers as being negatively affected by AI, and the high job churn suggests these roles are increasingly susceptible to displacement by more efficient, 24/7 automated systems."
+  },
+  {
+    "slug": "managers-directors-in-retail-wholesale",
+    "title": "Managers & directors in retail & wholesale",
+    "exposure": 6,
+    "rationale": "This role involves a significant amount of knowledge work such as inventory management, data-driven sales analysis, and strategic planning, all of which are highly susceptible to AI optimization. However, the physical nature of retail and wholesale environments requires human presence for staff management, physical site oversight, and complex interpersonal relationship building with suppliers and customers, which acts as a buffer against full automation."
+  },
+  {
+    "slug": "other-sales-marketing-associate-professionals",
+    "title": "Other sales & marketing associate professionals",
+    "exposure": 7,
+    "rationale": "This group consists of knowledge-heavy digital and administrative roles such as marketing executives, procurement officers, and analysts, which are highly susceptible to AI-driven automation in data analysis, content creation, and supply chain optimization. While some roles like estate agents and conference managers require physical presence and interpersonal negotiation, the increasing demand for 'digital marketing' and 'data analysis' skills noted in the report highlights a shift toward tasks where AI can significantly augment or replace human labor."
+  },
+  {
+    "slug": "sales-accounts-business-development-managers",
+    "title": "Sales accounts & business development managers",
+    "exposure": 7,
+    "rationale": "This occupation is predominantly digital and knowledge-based, involving data analysis, strategic communication, and CRM management, all of which are highly susceptible to AI enhancement and automation. While high-level relationship management and complex negotiations provide a buffer, AI is rapidly automating lead generation, sales forecasting, and personalized outreach, significantly increasing individual productivity and potentially reducing the total headcount required."
+  },
+  {
+    "slug": "sales-assistants",
+    "title": "Sales assistants",
+    "exposure": 5,
+    "rationale": "This occupation is a hybrid of physical presence and information processing. While core tasks like stocking shelves and physical customer assistance are insulated, significant portions such as checkout operations, telephone sales, and routine product inquiries are highly vulnerable to automation via self-service technology and AI-driven chatbots."
+  },
+  {
+    "slug": "sales-related-occupations",
+    "title": "Sales related occupations",
+    "exposure": 7,
+    "rationale": "This group contains a high concentration of digital and information-based roles, such as call center operations and sales supervisors, which are highly susceptible to AI automation and augmentation. While some roles like 'roundspersons' or 'street traders' have physical components, the overall sector is shifting toward digital skills, data analysis, and automated customer service, as noted by the DETE research cited in the report."
+  },
+  {
+    "slug": "assemblers-routine-operatives",
+    "title": "Assemblers & routine operatives",
+    "exposure": 4,
+    "rationale": "The occupation involves a mix of physical assembly and routine inspection tasks that are increasingly subject to computer vision and robotic automation, though the physical dexterity required provides a buffer. While AI enhances quality control and predictive maintenance in these environments, the core work remains grounded in the physical handling of goods and machinery rather than digital information processing."
+  },
+  {
+    "slug": "chemical-related-process",
+    "title": "Chemical & related process",
+    "exposure": 3,
+    "rationale": "This occupation primarily involves physical labor and the operation of machinery in a manufacturing environment, which provides a natural barrier to AI replacement. While AI and advanced automation can optimize chemical processes and monitoring, the core role still requires physical presence, manual intervention, and on-site safety management in a non-digital environment."
+  },
+  {
+    "slug": "cleaning",
+    "title": "Cleaning",
+    "exposure": 2,
+    "rationale": "Cleaning is a fundamentally physical occupation requiring manual dexterity and real-time navigation of unpredictable, three-dimensional environments. While AI can optimize scheduling or power autonomous vacuuming in specific settings, the core tasks\u2014such as window cleaning, refuse collection, and vehicle valeting\u2014remain highly resistant to digital automation."
+  },
+  {
+    "slug": "food-drink-tobacco-operatives",
+    "title": "Food, drink & tobacco operatives",
+    "exposure": 3,
+    "rationale": "The core tasks of food and tobacco operatives involve physical labor in production environments, such as meat processing and abattoir work, which are resistant to purely digital AI. While increased digitalization and robotics may automate some production lines, the current reliance on manual dexterity and physical presence in unpredictable biological processing limits immediate AI exposure."
+  },
+  {
+    "slug": "other-process-operatives-process-plant-occupations",
+    "title": "Other process operatives & process plant occupations",
+    "exposure": 3,
+    "rationale": "The core tasks of process operatives\u2014such as glass making, metal treating, and packing\u2014are primarily physical and occur in industrial environments, providing a natural barrier to pure AI replacement. While AI and advanced robotics will continue to automate production lines, these roles still require significant manual dexterity and physical presence, with AI's impact largely limited to peripheral digital tasks like quality monitoring or scheduling."
+  },
+  {
+    "slug": "plant-machine-operatives",
+    "title": "Plant & machine operatives",
+    "exposure": 3,
+    "rationale": "The core tasks involve physical operation of machinery and manual labor in environments like quarries, mines, and utility plants, which provides a natural buffer against AI. While AI and automation are increasing the 'digitalisation of tasks' and improving process efficiency, the requirement for physical presence and manual intervention in unpredictable industrial settings limits the immediate exposure to low-to-moderate levels."
+  },
+  {
+    "slug": "sales-storage-services",
+    "title": "Sales, storage & services",
+    "exposure": 3,
+    "rationale": "The core tasks of shelf fillers, hospital porters, and warehouse operatives are physical and require real-time presence in the physical world, which provides a natural barrier to AI. While AI and robotics can optimize logistics and inventory management, the 'elementary' nature of these roles involves manual dexterity and navigation in unpredictable environments that are currently difficult to fully automate. Exposure is limited to peripheral digital tasks like scanning, scheduling, and basic inventory tracking."
+  }
+]
