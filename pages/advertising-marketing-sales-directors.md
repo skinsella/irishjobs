@@ -6,8 +6,8 @@
 
 | Field | Value |
 |-------|-------|
-| Persons in employment (2024 annual avg) | 132,900 |
-| Annual average growth 2019–2024 | -0.4% |
+| Persons in employment (2024 annual avg) | 13,200 |
+| Annual average growth 2019–2024 | 18.3% |
 | % Aged 55+ | 64% |
 | % Irish citizens | 42% |
 | % Third-level graduates | 9% |

@@ -6,8 +6,8 @@
 
 | Field | Value |
 |-------|-------|
-| Persons in employment (2024 annual avg) | 13,100 |
-| Annual average growth 2019–2024 | 3.6% |
+| Persons in employment (2024 annual avg) | 8,700 |
+| Annual average growth 2019–2024 | 0.5% |
 | % Aged 55+ | 77% |
 | % Third-level graduates | 82% |
 | Linked SOC2010 unit groups | 9 |

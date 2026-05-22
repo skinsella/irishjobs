@@ -458,6 +458,65 @@ def main() -> None:
                     best_n, best = n, info
             return best
 
+        # ── One-to-one entry → figure-column assignment per section ──
+        # Without this constraint, the fuzzy token matcher can map two or
+        # more distinct occupational groups to the same chart column, which
+        # caused massive sector inflation (Sales & Customer Service: +144%,
+        # 1.04M jobs duplicated across the whole pipeline).
+        #
+        # We solve the assignment as a greedy bipartite matching: for each
+        # section, compute the pairwise (entry, column) match score, then
+        # repeatedly take the highest-scoring pair, lock both sides, and
+        # repeat until no positive-score pair remains.
+        STOPWORDS = {"and", "the", "of", "in", "for", "etc", "n", "e", "c", "&"}
+
+        def tokens(s: str) -> set[str]:
+            return {t for t in re.findall(r"\w+", s.lower()) if t not in STOPWORDS}
+
+        def match_score(toks_a: set[str], toks_b: set[str]) -> float:
+            score = float(len(toks_a & toks_b))
+            for a in toks_a:
+                for b in toks_b:
+                    if len(a) >= 4 and len(b) >= 4 and (a.startswith(b) or b.startswith(a)):
+                        score += 0.5
+            return score
+
+        # Bucket entries by their section.
+        entries_by_section: dict[int, list[dict]] = {}
+        for entry in entries:
+            sect_info = find_section(entry["category"])
+            if sect_info is None:
+                continue
+            sid = id(sect_info)
+            entries_by_section.setdefault(sid, []).append(entry)
+
+        # Assign columns one-to-one within each section.
+        entry_to_col: dict[str, int] = {}  # slug → column index in figure
+        for sect_info in section_index_by_name.values():
+            sid = id(sect_info)
+            sect_entries = entries_by_section.get(sid, [])
+            cols = sect_info["figure"].get("columns") or []
+            if not cols or not sect_entries:
+                continue
+            entry_toks = {e["slug"]: tokens(e["title"]) for e in sect_entries}
+            col_toks = {ci: tokens(lab) for ci, lab in enumerate(cols) if lab}
+            # Score every (entry, column) pair.
+            pairs: list[tuple[float, str, int]] = []
+            for e in sect_entries:
+                for ci, ct in col_toks.items():
+                    s = match_score(entry_toks[e["slug"]], ct)
+                    if s >= 0.5:
+                        pairs.append((s, e["slug"], ci))
+            pairs.sort(reverse=True)  # highest score first
+            used_slugs: set[str] = set()
+            used_cols: set[int] = set()
+            for score, slug, ci in pairs:
+                if slug in used_slugs or ci in used_cols:
+                    continue
+                entry_to_col[slug] = ci
+                used_slugs.add(slug)
+                used_cols.add(ci)
+
         processed = 0
         skipped = 0
         for entry in entries:
@@ -488,38 +547,10 @@ def main() -> None:
                     best_row = r
             stats = stats_from_row(best_row["raw_cells"]) if best_row else {}
 
-            # Per-group employed/growth.
-            # Step 1: indicator-row → figure-column map (most reliable when
-            #         present; uses unabbreviated indicator row names).
-            # Step 2: fall back to direct entry-title → figure-column token
-            #         match using stem-aware scoring.
+            # Per-group employed/growth — pull from the pre-computed
+            # one-to-one entry→column assignment for this section.
             fig = sect_info["figure"]
-            col_idx: int | None = None
-            if best_row is not None:
-                row_idx = sect_info["rows"].index(best_row)
-                col_idx = fig.get("row_to_col", {}).get(row_idx)
-            if col_idx is None:
-                col_labels = fig.get("columns") or []
-                title_tokens = set(re.findall(r"\w+", entry["title"].lower())) - {
-                    "and", "the", "of", "in", "for", "etc", "n", "e", "c"
-                }
-                best_col, best_score = None, 0.0
-                for ci, lab in enumerate(col_labels):
-                    if not lab:
-                        continue
-                    ltoks = set(re.findall(r"\w+", lab.lower())) - {
-                        "and", "the", "of", "in", "for", "etc", "n", "e", "c"
-                    }
-                    score = float(len(title_tokens & ltoks))
-                    for tt in title_tokens:
-                        for lt in ltoks:
-                            if len(tt) >= 4 and len(lt) >= 4 and (tt.startswith(lt) or lt.startswith(tt)):
-                                score += 0.5
-                    if score > best_score:
-                        best_score = score
-                        best_col = ci
-                if best_col is not None and best_score >= 0.5:
-                    col_idx = best_col
+            col_idx = entry_to_col.get(slug)
             if col_idx is not None:
                 empl = fig.get("employed", [])
                 grw = fig.get("growth_pct", [])

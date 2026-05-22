@@ -6,8 +6,8 @@
 
 | Field | Value |
 |-------|-------|
-| Persons in employment (2024 annual avg) | 14,900 |
-| Annual average growth 2019–2024 | 10.1% |
+| Persons in employment (2024 annual avg) | 25,100 |
+| Annual average growth 2019–2024 | 6.3% |
 | % Aged 55+ | 55% |
 | % Irish citizens | 92% |
 | Linked SOC2010 unit groups | 3 |

@@ -126,6 +126,16 @@ frontend intro paragraph:
    See `DOF_RISK_TIER` in
    [scripts/04_make_csv.py](scripts/04_make_csv.py) to override the
    mapping.
+4. **The total employment shown (~2.6M) is below the CSO LFS headline
+   of ~2.76M.** Two reasons. (a) The NSB itself only classifies ~2.66M
+   workers into its 16 occupational chapters — armed forces, workers
+   with undisclosed SOC codes, and a handful of small-N categories
+   sit outside. (b) The parser cannot match every NSB occupational
+   group to a chart column when the labels are heavily abbreviated
+   (typically 6 of 100 groups end up without an employment value), so
+   we under-count by another ~50K. The treemap tile for those groups
+   shows no employment. Improving the bar-chart column-label OCR
+   would close most of the gap.
 4. **No age × occupation data** is publicly available from CSO — the
    DoF's under-30 employment chart was computed from microdata under
    their RMF access. We cannot reproduce the age-cohort split at the

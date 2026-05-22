@@ -6,8 +6,6 @@
 
 | Field | Value |
 |-------|-------|
-| Persons in employment (2024 annual avg) | 50,900 |
-| Annual average growth 2019–2024 | 5.3% |
 | Flagged by Recruitment Agency Survey | Yes |
 | Linked SOC2010 unit groups | 1 |
 

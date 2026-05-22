@@ -6,8 +6,8 @@
 
 | Field | Value |
 |-------|-------|
-| Persons in employment (2024 annual avg) | 32,300 |
-| Annual average growth 2019–2024 | 7.9% |
+| Persons in employment (2024 annual avg) | 16,600 |
+| Annual average growth 2019–2024 | 6.5% |
 | Linked SOC2010 unit groups | 3 |
 
 ## SOC2010 unit groups included
