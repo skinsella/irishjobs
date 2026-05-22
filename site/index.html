@@ -260,7 +260,15 @@ Respond with ONLY a JSON object in this exact format, no other text:
       <canvas id="gradientLegend" width="80" height="8"></canvas>
       <span id="legendHigh">Growing</span>
     </div>
+    <div style="flex:1"></div>
+    <div class="stat-section" style="flex:0 0 auto;">
+      <h3>Search</h3>
+      <input id="searchBox" type="text" placeholder="Filter occupations…"
+        style="padding:6px 10px;font-size:12px;width:220px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:4px;color:var(--fg);outline:none;" />
+    </div>
   </div>
+
+  <div id="validationBanner" style="display:none;margin:6px 0 14px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;font-size:13px;line-height:1.5;color:var(--fg2);"></div>
 
   <div class="stats-row">
     <div class="stat-section">
@@ -446,6 +454,15 @@ function worstAspect(row, rowSum, side, totalArea, availableExtent) {
 let data = [];
 let rects = [];
 let hovered = null;
+let searchQuery = "";
+
+function tileMatches(d) {
+  if (!searchQuery) return true;
+  const q = searchQuery.toLowerCase();
+  return (d.title || "").toLowerCase().includes(q)
+      || (d.category || "").toLowerCase().includes(q)
+      || (d.exposure_rationale || "").toLowerCase().includes(q);
+}
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let dpr = window.devicePixelRatio || 1;
@@ -480,21 +497,25 @@ function draw() {
   ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
   for (const r of rects) {
     const isHovered = r === hovered;
+    const matches = tileMatches(r);
+    const baseA = matches ? 0.5 : 0.07;
+    const hovA  = matches ? 0.8 : 0.15;
     const g = GAP / 2, rx = r.rx + g, ry = r.ry + g, rw = r.rw - g * 2, rh = r.rh - g * 2;
     if (rw <= 0 || rh <= 0) continue;
-    ctx.fillStyle = tileColorCSS(r, isHovered ? 0.8 : 0.5);
+    ctx.fillStyle = tileColorCSS(r, isHovered ? hovA : baseA);
     ctx.fillRect(rx, ry, rw, rh);
     if (isHovered) { ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(rx, ry, rw, rh); }
     if (rw > 50 && rh > 18) {
       ctx.save(); ctx.beginPath(); ctx.rect(rx + 4, ry + 2, rw - 8, rh - 4); ctx.clip();
       const fontSize = Math.min(13, Math.max(9, Math.min(rw / 10, rh / 3)));
       ctx.font = `500 ${fontSize}px -apple-system, system-ui, sans-serif`;
-      ctx.fillStyle = isHovered ? "#fff" : "rgba(255,255,255,0.85)";
+      const textA = matches ? 1 : 0.18;
+      ctx.fillStyle = isHovered ? `rgba(255,255,255,${textA})` : `rgba(255,255,255,${0.85 * textA})`;
       ctx.textBaseline = "top";
       ctx.fillText(r.title, rx + 5, ry + 4);
       if (rh > 34 && rw > 60) {
         ctx.font = `400 ${Math.max(8, fontSize - 2)}px -apple-system, system-ui, sans-serif`;
-        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.fillStyle = `rgba(255,255,255,${0.5 * textA})`;
         ctx.fillText(tileSubInfo(r), rx + 5, ry + 4 + fontSize + 2);
       }
       ctx.restore();
@@ -649,6 +670,47 @@ function updateStats() {
   else if (colorMode === "pay") updatePayStats(totalJobs);
   else if (colorMode === "education") updateEducationStats(totalJobs);
   else updateExposureStats(totalJobs);  // also handles exposure_complementary / exposure_substitutable
+
+  updateValidationBanner();
+}
+
+function updateValidationBanner() {
+  const banner = document.getElementById("validationBanner");
+  const isExposure = colorMode === "exposure" || colorMode === "exposure_complementary" || colorMode === "exposure_substitutable";
+  if (!isExposure) { banner.style.display = "none"; return; }
+  const field = exposureField();
+  // Job-weighted average growth for low (0–3) vs high (7–10) on this axis.
+  function avgGrowth(lo, hi) {
+    let wS = 0, wC = 0;
+    for (const d of data) {
+      if (d[field] == null || d.outlook == null || !d.jobs) continue;
+      if (d[field] < lo || d[field] > hi) continue;
+      wS += d.outlook * d.jobs; wC += d.jobs;
+    }
+    return wC > 0 ? wS / wC : null;
+  }
+  const lo = avgGrowth(0, 3), hi = avgGrowth(7, 10);
+  if (lo == null || hi == null) { banner.style.display = "none"; return; }
+  const gap = hi - lo;
+  // Pick verb + colour by axis direction.
+  const verb = {
+    exposure_complementary: gap > 0
+      ? "<b>grew faster</b> than" : "grew slower than",
+    exposure_substitutable: gap < 0
+      ? "<b>grew slower</b> than" : "grew faster than",
+    exposure: gap > 0 ? "grew faster than" : "grew slower than",
+  }[field];
+  const label = exposureLabel().toLowerCase();
+  const color = outlookColor(gap > 0 ? 6 : -3, 1);
+  banner.style.display = "block";
+  banner.innerHTML = `
+    <b>Backtest (2019&ndash;2024 LFS):</b>
+    Occupations scoring 7+ on ${label} ${verb} those scoring 0&ndash;3 &mdash;
+    <span style="color:${color};font-weight:600;">${hi >= 0 ? "+" : ""}${hi.toFixed(1)}%</span>
+    vs ${lo >= 0 ? "+" : ""}${lo.toFixed(1)}% (gap: ${gap >= 0 ? "+" : ""}${gap.toFixed(1)}pp, job-weighted).
+    ${field === "exposure_substitutable" && gap < 0 ? "Matches the Department of Finance Box 4 finding that AI-substitutable sectors are growing slowest." : ""}
+    ${field === "exposure_complementary" && gap > 0 ? "Consistent with AI augmenting knowledge workers and lifting demand for them." : ""}
+  `;
 }
 
 function exposureField() {
@@ -864,10 +926,32 @@ function updateExposureStats(totalJobs) {
     label: g.label, val: g.avg.toFixed(1), pct: g.avg / 10 * 100, color: exposureColor(g.avg, 0.8)
   })))}</div>`;
 
-  // Cross: exposure by education
-  const byEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d[field]);
-  document.getElementById("block6").innerHTML = `<h3>${label} by education</h3><div class="hbar-chart">${renderHbars(byEdu.map(g => ({
-    label: g.label, val: g.avg.toFixed(1), pct: g.avg / 10 * 100, color: exposureColor(g.avg, 0.8)
+  // BACKTEST: actual 5-yr employment growth by exposure tier.
+  // Tests whether the LLM's exposure score predicts the slowdown the
+  // Department of Finance observed at sector level (Box 4, "AI & the
+  // Irish labour market"): high-risk sectors +3.1% vs low-risk +6.2%
+  // in 2023–2025. Job-weighted growth across this site's 100 NSB
+  // occupations should mirror that pattern if the scoring works.
+  const EX_TIERS = [
+    { label: "Low (0–3)",  lo: 0, hi: 3, mid: 1.5 },
+    { label: "Med (4–6)",  lo: 4, hi: 6, mid: 5   },
+    { label: "High (7–10)", lo: 7, hi: 10, mid: 8.5 },
+  ];
+  const backtest = EX_TIERS.map(t => {
+    let wS = 0, wC = 0, nOcc = 0;
+    for (const d of data) {
+      if (d[field] == null || d.outlook == null || !d.jobs) continue;
+      if (d[field] < t.lo || d[field] > t.hi) continue;
+      wS += d.outlook * d.jobs;
+      wC += d.jobs;
+      nOcc += 1;
+    }
+    return { ...t, avgGrowth: wC > 0 ? wS / wC : 0, jobs: wC, n: nOcc };
+  });
+  document.getElementById("block6").innerHTML = `<h3>5-yr growth by ${label.toLowerCase()}</h3><div class="hbar-chart">${renderHbars(backtest.map(g => ({
+    label: g.label, val: (g.avgGrowth > 0 ? "+" : "") + g.avgGrowth.toFixed(1) + "%",
+    pct: Math.max(0, Math.min(100, (g.avgGrowth + 2) / 12 * 100)),
+    color: outlookColor(g.avgGrowth, 0.8),
   })))}</div>`;
 
   // DoF risk-tier breakdown (cross-check against published Irish framework)
@@ -941,6 +1025,25 @@ document.getElementById("colorToggle").addEventListener("click", (e) => {
   draw();
   // Re-layout since stats height may have changed
   requestAnimationFrame(resize);
+});
+
+// ── Search ────────────────────────────────────────────────────────────
+document.getElementById("searchBox").addEventListener("input", (e) => {
+  searchQuery = e.target.value.trim();
+  draw();
+});
+// Cmd/Ctrl-K focuses the search box.
+document.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+    e.preventDefault();
+    document.getElementById("searchBox").focus();
+  }
+  if (e.key === "Escape" && document.activeElement.id === "searchBox") {
+    document.getElementById("searchBox").value = "";
+    searchQuery = "";
+    draw();
+    document.getElementById("searchBox").blur();
+  }
 });
 
 // ── Load ───────────────────────────────────────────────────────────────
