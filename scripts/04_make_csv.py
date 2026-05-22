@@ -184,10 +184,16 @@ def map_education(pct_third_level: float | None, sector: str) -> str:
 
 
 def classify_outlook(growth_pct: float | None, shortage: str) -> str:
-    """Generate an outlook_desc string in the US OOH style."""
-    if shortage:
-        # The NSB's verbal tag is more informative than a percentage band.
-        return f"{shortage}"
+    """Generate an outlook_desc string in the US OOH style.
+
+    NSB shortage tags exist in the PDF but our 2-column-layout parser
+    cannot extract them reliably (it has attributed e.g. carpenters'
+    narrative text to plumbers). Until the per-occupation narrative
+    parser is rewritten, we ignore the captured shortage value and
+    derive outlook_desc purely from the growth percentage. Honest
+    derived label > misattributed real label.
+    """
+    _ = shortage  # not used; see docstring
     if growth_pct is None:
         return ""
     if growth_pct >= 5:

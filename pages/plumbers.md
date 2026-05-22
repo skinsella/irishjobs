@@ -9,7 +9,6 @@
 | Persons in employment (2024 annual avg) | 12,300 |
 | Annual average growth 2019–2024 | 1.2% |
 | % Irish citizens | 96% |
-| Skills shortage assessment | Carpenters In 2024, at 771, the number of new carpentry and joinery apprentice registrations was 8% |
 | Linked SOC2010 unit groups | 1 |
 
 ## SOC2010 unit groups included
@@ -114,18 +113,3 @@ demand is evident from a number of sources. Vacancies for CAD technicians/design
 Construction-related appeared in the DSP Jobs Ireland data with both CAD and BIM technicians mentioned as
 technicians difficult to source in the Recruitment Agency Survey. Employment permits issued for this
 occupation were also primarily related to CAD and BIM technicians. BIM skills are often a
-
-## Occupation-level outlook
-
-Plumbers play a key role in home energy upgrades (e.g. installation of sustainable heat
-pumps) and demand for plumbers, particularly those with skills and expertise in water, waste
-water, and energy efficient systems, will be in demand.
-Employment has fluctuated over the five-year period for carpenters and joiners;
-employment declined by 1,700 persons in 2024, returning to 2019 levels. Despite this,
-demand is evident. There was a large volume of vacancy posts notified through DSP Jobs
-Ireland with shuttering carpenters accounting for a significant share. The number of
-employment permits (for carpenters including shuttering) has been increasing annually since
-Carpenters & joiners 2021 and carpenters (including shuttering) also appeared in the Recruitment Agency Survey
-as being difficult-to-source.
-
-**Skills shortage:** Carpenters In 2024, at 771, the number of new carpentry and joinery apprentice registrations was 8%

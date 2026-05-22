@@ -308,8 +308,11 @@ def render_md(entry: dict, group_stats: dict, sector_meta: dict,
                   f"{group_stats['new_permits']:,} |")
     if group_stats.get("ras_flag"):
         md.append("| Flagged by Recruitment Agency Survey | Yes |")
-    if narrative.get("shortage"):
-        md.append(f"| Skills shortage assessment | {narrative['shortage']} |")
+    # Skills shortage tag is NOT emitted here. The 2-column-layout
+    # parser misattributes shortage text across adjacent occupations
+    # in the same section (e.g. carpenters' narrative landing on
+    # plumbers), so reporting it would be unreliable. The downstream
+    # consumer (04_make_csv.classify_outlook) also ignores it.
     md.append(f"| Linked SOC2010 unit groups | "
               f"{len(entry.get('soc_descriptions', []))} |")
     md.append("")
@@ -346,14 +349,9 @@ def render_md(entry: dict, group_stats: dict, sector_meta: dict,
         md.append(sector_outlook)
         md.append("")
 
-    if narrative.get("narrative"):
-        md.append("## Occupation-level outlook")
-        md.append("")
-        md.append(narrative["narrative"])
-        md.append("")
-        if narrative.get("shortage"):
-            md.append(f"**Skills shortage:** {narrative['shortage']}")
-            md.append("")
+    # Per-occupation narrative section is also withheld until the 2-column
+    # parser is rewritten; the column-mis-attribution problem applies to
+    # the narrative body as well as the shortage tag.
 
     return "\n".join(md)
 

@@ -110,11 +110,3 @@ part-time. Almost two-thirds of persons employed were male, the highest share ac
 all hospitality occupations.
 Housekeepers Employment numbers in this occupation were too small for any detailed analysis.
 National Skills Bulletin October 2025 190
-
-## Occupation-level outlook
-
-24 years, and along with waiters/waitresses, had the highest share of persons working
-part-time. Almost two-thirds of persons employed were male, the highest share across
-all hospitality occupations.
-Housekeepers Employment numbers in this occupation were too small for any detailed analysis.
-National Skills Bulletin October 2025 190

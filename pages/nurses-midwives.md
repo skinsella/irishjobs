@@ -15,7 +15,6 @@
 | % Third-level graduates | 98% |
 | New employment permits (2024) | 5,107 |
 | Flagged by Recruitment Agency Survey | Yes |
-| Skills shortage assessment | Nurses |
 | Linked SOC2010 unit groups | 1 |
 
 ## SOC2010 unit groups included
@@ -85,12 +84,3 @@ for medical practitioners, with almost 6,000 additional persons employed since 2
 The gender split was broadly in line with the national average, whereas, at 33%, the
 share of non-Irish citizens employed was above average. Almost 1,700 new
 employment permits were issued for roles including senior house officers, registrars,
-
-## Occupation-level outlook
-
-included for staff nurses and nurse managers. The high volume of recent job hires and
-employment permits (the highest number across all occupations), with no
-employment growth suggests that a significant level of job roles filled were most
-likely replacing those who had exited the occupation.
-
-**Skills shortage:** Nurses

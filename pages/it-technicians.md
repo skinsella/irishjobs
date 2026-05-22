@@ -126,13 +126,3 @@ evident, the lack of employment growth suggests that there is no overall shortag
 technicians at present.
 43 Hiring Lab | Data Portal | Indeed.com
 National Skills Bulletin October 2025 160
-
-## Occupation-level outlook
-
-sources, related to ICT user support technicians. Difficult-to-fill vacancies mentioned in
-the Recruitment Agency Survey related mainly to technical support roles (with language
-skills). Although some issues with attracting people with specific skills (e.g. languages) is
-evident, the lack of employment growth suggests that there is no overall shortage of IT
-technicians at present.
-43 Hiring Lab | Data Portal | Indeed.com
-National Skills Bulletin October 2025 160

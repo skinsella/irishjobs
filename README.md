@@ -108,6 +108,43 @@ window — the dataset's most striking finding and the strongest single
 piece of evidence that AI labour-market effects are already visible
 in Irish data.
 
+## Data lineage — every figure on screen, every source
+
+Each field in `site/data.json` (the only data the frontend reads) is one of:
+
+| Field | Type | Source | Status |
+|-------|------|--------|--------|
+| `title` | string | NSB 2025 Appendix, middle column (parsed from PDF) | ✓ real |
+| `slug` | string | Deterministic slugify of `title` | ✓ derived from real |
+| `category` | string | NSB 2025 Appendix, leftmost column (parsed from PDF) | ✓ real |
+| `jobs` | int | NSB Section 10 "Annual Average Employment 2024" figure — number printed under each bar in the chart | ✓ real (94/100; 6 groups unmatched, shown as null) |
+| `outlook` | int (%) | NSB Section 10 "Annual Average Growth Rates 2019–2024" figure — percentage printed under each bar | ✓ real (93/100) |
+| `outlook_desc` | string | **Derived classification** from `outlook` using internal thresholds: ≥5% "Much faster", ≥3% "Faster", ≥1% "As fast as", ≥0% "Slower", else "Decline" | ⚠ derived, not published |
+| `pay` | int (€/yr) | **Sector-weighted estimate**: CSO DEN11 median weekly earnings 2024 × NSB main-NACE-sector mix × 52 weeks. No occupation-specific median exists in public Irish data. | ⚠ derived, not published |
+| `education` | string | **Derived classification** from NSB "% Third-level graduates" via internal thresholds (≥90% "Doctoral/Professional"; ≥80% "Master's"; ≥60% "Bachelor's"; …). Empty for the 60 groups where the parser couldn't extract the %3rd-level field from the NSB indicator table. | ⚠ derived, not published |
+| `exposure_complementary` | int 0–10 | OpenRouter LLM (Gemini Flash) given the per-group NSB profile; calibrated against a 12-occupation anchor grid from Williamson et al. (2024) | ⚠ model estimate, not data |
+| `exposure_substitutable` | int 0–10 | Same | ⚠ model estimate |
+| `exposure` | int 0–10 | `max(complementary, substitutable)` | ⚠ derived from model |
+| `exposure_rationale` | string | LLM output | ⚠ model output |
+| `dof_risk_tier` | string ∈ {high, medium, low} | **Hand-coded mapping** from NSB sector → DoF risk tier, calibrated against Williamson et al. (2024). DoF did not publish per-NSB-sector tiers directly; the mapping is documented in `DOF_RISK_TIER` in [scripts/04_make_csv.py](scripts/04_make_csv.py) | ⚠ judgment from real framework |
+| `url` | string | Hardcoded to the NSB landing page (the PDF has no per-occupation deep-links) | ⚠ same URL for all 100 |
+
+**Hardcoded constants used in derivations (all national-average defaults, no per-occupation guessing):**
+
+- `weeks_per_year = 52` (annual = weekly × 52)
+- `hours_per_week = 39` (hourly = weekly ÷ 39; CSO's Irish full-time avg ~38.5h)
+
+**Fields where the parser previously hallucinated and have been removed:**
+
+- ~~`Skills shortage assessment` row in `pages/*.md`~~ — NSB 2-column-layout text capture was misattributing carpenters' narrative to plumbers and a generic "Nurses" header to nurses-midwives. Until the parser is rewritten with x-coordinate-aware column splitting, the shortage tag is **not emitted** anywhere downstream and `outlook_desc` falls back to the percentage-band classification. Audit revealed this 2-row contamination on 2026-05-22; fix landed in commit [TBD] of this push.
+- ~~`Occupation-level outlook` per-group narrative~~ — same root cause; suppressed for the same reason. The sector-level outlook paragraph (which IS reliable) is kept.
+
+**What the LLM saw:** the AI exposure scores were generated against the per-occupation Markdown that contains the Quick Facts table (real NSB figures), the SOC unit-group list, the sector context block, and the sector-level outlook narrative — all of which trace to real NSB data. The garbage shortage tag was present in the LLM input for nurses + plumbers only, and a spot check shows the resulting scores (Nurses comp=7/subst=1; Plumbers comp=1/subst=0) are still sensible — the model treated the contamination as low-signal text. No re-scoring was needed.
+
+**What was checked, what is not in this codebase:**
+
+- Probed CSO PxStat for any public table cross-tabulating SOC2010 occupation × age, NACE sector × age, and NACE × age × time — **none exist publicly**. The Department of Finance's striking under-30 ICT chart (Figure 10B of Box 4, "AI and the Irish labour market") was computed from CSO microdata under RMF access, which is not on PxStat. The finding is cited in the intro paragraph but **not reproduced** in this site; reproducing it would require fabricating an age trend, which we have not done.
+
 ## Methodological caveats
 
 The Irish data is less granular than the US BLS data. See [PLAN.md §2](PLAN.md)

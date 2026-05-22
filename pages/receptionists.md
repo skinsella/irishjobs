@@ -70,17 +70,3 @@ The majority employed as receptionists were female and approximately half worked
 Receptionists
 part-time. The digitalisation and automation of tasks associated with this role has seen a
 reduced demand for this occupation.
-
-## Occupation-level outlook
-
-part-time. The digitalisation and automation of tasks associated with this role has seen a
-reduced demand for this occupation.
-Elementary
-The numbers employed in this occupation are too small for detailed analysis. There was
-admin (e.g.
-a relatively large volume of vacancy posts on DSP Jobs Ireland through 2024 for postal
-postal workers,
-operatives with An Post.
-couriers)
-80 https://assets.gov.ie/211842/8d223347-9114-43dd-84c5-78f685c63f1b.pdf
-National Skills Bulletin October 2025 198
