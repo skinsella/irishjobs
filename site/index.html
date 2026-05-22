@@ -212,6 +212,7 @@ canvas#canvas {
     <h1>Irish Job Market Visualiser</h1>
     <p>This is a research tool that visualises <b>100 occupational groups</b> from the SOLAS <a href="https://www.solas.ie/research-lp/skills-labour-market-research-slmru/">National Skills Bulletin 2025</a> covering Ireland's labour market. Each rectangle's <b>area</b> is proportional to total employment in that group (CSO Labour Force Survey, 2024 annual average). <b>Colour</b> shows the selected metric &mdash; toggle between 5-year historical growth (NSB), sector-implied median pay (CSO), education profile (NSB), and AI exposure (LLM). Click any tile to view its source page. This is a development tool for exploring NSB data visually, not a report, paper, or serious economic publication. It is a port of <a href="https://karpathy.ai/jobs/">karpathy.ai/jobs</a> to Irish data.</p>
     <p><b>Data caveats:</b> Ireland has no public dataset equivalent to the US Bureau of Labor Statistics OOH. The NSB groups SOC2010 unit groups into ~100 occupational groups; CSO's public earnings tables only break down by NACE sector, so the pay layer here is a <i>sector-weighted estimate</i> using each occupation's main-sector mix from the NSB profile. The outlook layer is the <i>5-year historical employment growth rate (2019&ndash;2024)</i> — there is no Irish occupational-level forward projection equivalent to BLS's 10-year forecast.</p>
+    <p><b>AI exposure (two axes):</b> Following the Department of Finance / DETE framework in <a href="https://assets.gov.ie/static/documents/artificial-intelligence-friend-or-foe-an-analysis-of-how-ai-could-impact-irelands-labo.pdf">Williamson et al. (2024) "AI: Friend or Foe?"</a> and the <a href="https://assets.gov.ie/static/documents/391b8952/Economic_Insights_Volume_1_2026.pdf">DoF Economic Insights Volume 1 2026</a>, this site splits AI exposure into <b>complementary</b> ("AI makes the worker more productive") and <b>substitutable</b> ("AI displaces the work"). Use the buttons below to colour the treemap by either axis, or by the overall maximum. Each occupation is also tagged with the DoF's high / medium / low risk tier (shown in the tooltip) — recent CSO data shows that "high risk" sectors grew employment by only 3.1% in 2023–2025 vs 6.2% in low-risk sectors, with under-30 ICT employment falling 32% over the same window.</p>
     <details>
       <summary>View the Digital AI Exposure scoring prompt (example)</summary>
       <div class="prompt-box">You are an expert analyst evaluating how exposed different occupations are to AI. You will be given a detailed description of an occupation from the SOLAS National Skills Bulletin (Ireland's annual labour-market report).
@@ -249,7 +250,9 @@ Respond with ONLY a JSON object in this exact format, no other text:
         <button data-mode="outlook" class="active">5-yr Growth (NSB)</button>
         <button data-mode="pay">Median Pay (sector-weighted)</button>
         <button data-mode="education">Education</button>
-        <button data-mode="exposure">Digital AI Exposure</button>
+        <button data-mode="exposure_complementary">AI Complementary</button>
+        <button data-mode="exposure_substitutable">AI Substitutable</button>
+        <button data-mode="exposure">AI Exposure (max)</button>
       </div>
     </div>
     <div class="gradient-legend">
@@ -346,6 +349,8 @@ function exposureColor(v, a) {
 
 function tileColorCSS(d, alpha) {
   if (colorMode === "exposure") return exposureColor(d.exposure, alpha);
+  if (colorMode === "exposure_complementary") return exposureColor(d.exposure_complementary, alpha);
+  if (colorMode === "exposure_substitutable") return exposureColor(d.exposure_substitutable, alpha);
   if (colorMode === "outlook") return outlookColor(d.outlook, alpha);
   if (colorMode === "pay") return payColor(d.pay, alpha);
   if (colorMode === "education") {
@@ -355,8 +360,9 @@ function tileColorCSS(d, alpha) {
 }
 
 function tileSubInfo(r) {
-  if (colorMode === "exposure") {
-    return (r.exposure != null ? r.exposure + "/10" : "") +
+  if (colorMode === "exposure" || colorMode === "exposure_complementary" || colorMode === "exposure_substitutable") {
+    const v = r[colorMode];
+    return (v != null ? v + "/10" : "") +
            (r.jobs ? " \u00b7 " + formatNumber(r.jobs) + " jobs" : "");
   }
   if (colorMode === "outlook") {
@@ -515,11 +521,16 @@ function formatNumber(n) {
 function formatPay(n) { return n == null ? "\u2014" : "\u20ac" + n.toLocaleString(); }
 
 function tooltipHighlight(d) {
-  if (colorMode === "exposure") {
-    const v = d.exposure;
+  if (colorMode === "exposure" || colorMode === "exposure_complementary" || colorMode === "exposure_substitutable") {
+    const v = d[colorMode];
     if (v == null) return "";
+    const label = {
+      exposure: "AI Exposure (max of two)",
+      exposure_complementary: "AI Complementary (augments)",
+      exposure_substitutable: "AI Substitutable (displaces)",
+    }[colorMode];
     const color = exposureColor(v, 1);
-    return `<span style="color:${color};font-weight:600;">Digital AI Exposure: ${v}/10</span>` +
+    return `<span style="color:${color};font-weight:600;">${label}: ${v}/10</span>` +
       `<div style="margin-top:3px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;">` +
       `<div style="height:100%;width:${v * 10}%;background:${color};border-radius:2px;"></div></div>`;
   } else if (colorMode === "outlook") {
@@ -550,12 +561,19 @@ function showTooltip(d, mx, my) {
   const tt = document.getElementById("tooltip");
   tt.querySelector(".tt-title").textContent = d.title;
   tt.querySelector(".tt-exposure").innerHTML = tooltipHighlight(d);
+  const tierBadge = d.dof_risk_tier
+    ? `<span style="display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;background:${{high:'rgba(230,60,40,0.25)',medium:'rgba(220,170,40,0.22)',low:'rgba(50,180,80,0.22)'}[d.dof_risk_tier]||'rgba(128,128,128,0.2)'};color:${{high:'#ff8470',medium:'#e8c060',low:'#7adf90'}[d.dof_risk_tier]||'#aaa'};">${d.dof_risk_tier}</span>`
+    : '\u2014';
   tt.querySelector(".tt-stats").innerHTML = `
     <span class="label">Median pay</span><span class="value">${formatPay(d.pay)}</span>
     <span class="label">Jobs (2024)</span><span class="value">${formatNumber(d.jobs)}</span>
-    <span class="label">Outlook</span><span class="value">${d.outlook != null ? d.outlook + '%' : '\u2014'} ${d.outlook_desc ? '(' + d.outlook_desc + ')' : ''}</span>
-    <span class="label">Education</span><span class="value">${d.education || '\u2014'}</span>`;
-  tt.querySelector(".tt-rationale").textContent = colorMode === "exposure" ? (d.exposure_rationale || "") : "";
+    <span class="label">5-yr growth</span><span class="value">${d.outlook != null ? d.outlook + '%' : '\u2014'} ${d.outlook_desc ? '(' + d.outlook_desc + ')' : ''}</span>
+    <span class="label">Education</span><span class="value">${d.education || '\u2014'}</span>
+    <span class="label">AI complementary</span><span class="value">${d.exposure_complementary != null ? d.exposure_complementary + '/10' : '\u2014'}</span>
+    <span class="label">AI substitutable</span><span class="value">${d.exposure_substitutable != null ? d.exposure_substitutable + '/10' : '\u2014'}</span>
+    <span class="label">DoF risk tier</span><span class="value">${tierBadge}</span>`;
+  const showRationale = colorMode === "exposure" || colorMode === "exposure_complementary" || colorMode === "exposure_substitutable";
+  tt.querySelector(".tt-rationale").textContent = showRationale ? (d.exposure_rationale || "") : "";
   let tx = mx + 16, ty = my - 16;
   if (tx + 340 > window.innerWidth) tx = mx - 356;
   if (ty < 10) ty = my + 16;
@@ -630,7 +648,19 @@ function updateStats() {
   if (colorMode === "outlook") updateOutlookStats(totalJobs);
   else if (colorMode === "pay") updatePayStats(totalJobs);
   else if (colorMode === "education") updateEducationStats(totalJobs);
-  else updateExposureStats(totalJobs);
+  else updateExposureStats(totalJobs);  // also handles exposure_complementary / exposure_substitutable
+}
+
+function exposureField() {
+  return (colorMode === "exposure_complementary" || colorMode === "exposure_substitutable")
+    ? colorMode : "exposure";
+}
+function exposureLabel() {
+  return {
+    exposure: "AI Exposure (max)",
+    exposure_complementary: "AI Complementary",
+    exposure_substitutable: "AI Substitutable",
+  }[exposureField()];
 }
 
 function updateOutlookStats(totalJobs) {
@@ -796,18 +826,20 @@ function updateEducationStats(totalJobs) {
 }
 
 function updateExposureStats(totalJobs) {
+  const field = exposureField();
+  const label = exposureLabel();
   let wS = 0, wC = 0;
-  for (const d of data) { if (d.exposure != null && d.jobs) { wS += d.exposure * d.jobs; wC += d.jobs; } }
+  for (const d of data) { if (d[field] != null && d.jobs) { wS += d[field] * d.jobs; wC += d.jobs; } }
   const avg = wC > 0 ? wS / wC : 0;
-  document.getElementById("block2").innerHTML = `<h3>Avg. exposure</h3>
+  document.getElementById("block2").innerHTML = `<h3>Avg. ${label.toLowerCase()}</h3>
     <div class="stat-big"><span style="color:${exposureColor(avg, 1)}">${avg.toFixed(1)}</span></div>
     <div class="stat-label">job-weighted, 0\u201310</div>`;
 
   // Histogram
   const histogram = new Array(11).fill(0);
-  for (const d of data) { if (d.exposure != null && d.jobs) histogram[d.exposure] += d.jobs; }
+  for (const d of data) { if (d[field] != null && d.jobs) histogram[d[field]] += d.jobs; }
   const maxH = Math.max(...histogram);
-  document.getElementById("block3").innerHTML = `<h3>Jobs by exposure</h3>
+  document.getElementById("block3").innerHTML = `<h3>Jobs by ${label.toLowerCase()}</h3>
     <div class="histogram">${histogram.map((c, i) => `<div class="bar" style="height:${Math.max(2, maxH > 0 ? c / maxH * 100 : 0)}%;background:${exposureColor(i, 0.7)}"></div>`).join("")}</div>
     <div class="hist-labels"><span>0</span><span>5</span><span>10</span></div>`;
 
@@ -821,30 +853,42 @@ function updateExposureStats(totalJobs) {
   ];
   const tiers = tierDefs.map(t => {
     let jobs = 0;
-    for (const d of data) { if (d.exposure != null && d.jobs && d.exposure >= t.lo && d.exposure <= t.hi) jobs += d.jobs; }
+    for (const d of data) { if (d[field] != null && d.jobs && d[field] >= t.lo && d[field] <= t.hi) jobs += d.jobs; }
     return { ...t, jobs, color: exposureColor(t.mid, 1) };
   });
-  document.getElementById("block4").innerHTML = `<h3>Exposure tiers</h3><div class="tier-bar">${renderTiers(tiers, totalJobs)}</div>`;
+  document.getElementById("block4").innerHTML = `<h3>${label} tiers</h3><div class="tier-bar">${renderTiers(tiers, totalJobs)}</div>`;
 
   // Cross: exposure by pay
-  const byPay = weightedAvgByGroups(PAY_BANDS, (d, g) => d.pay != null && d.pay >= g.min && d.pay < g.max, d => d.exposure);
-  document.getElementById("block5").innerHTML = `<h3>Exposure by pay</h3><div class="hbar-chart">${renderHbars(byPay.map(g => ({
+  const byPay = weightedAvgByGroups(PAY_BANDS, (d, g) => d.pay != null && d.pay >= g.min && d.pay < g.max, d => d[field]);
+  document.getElementById("block5").innerHTML = `<h3>${label} by pay</h3><div class="hbar-chart">${renderHbars(byPay.map(g => ({
     label: g.label, val: g.avg.toFixed(1), pct: g.avg / 10 * 100, color: exposureColor(g.avg, 0.8)
   })))}</div>`;
 
   // Cross: exposure by education
-  const byEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d.exposure);
-  document.getElementById("block6").innerHTML = `<h3>Exposure by education</h3><div class="hbar-chart">${renderHbars(byEdu.map(g => ({
+  const byEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d[field]);
+  document.getElementById("block6").innerHTML = `<h3>${label} by education</h3><div class="hbar-chart">${renderHbars(byEdu.map(g => ({
     label: g.label, val: g.avg.toFixed(1), pct: g.avg / 10 * 100, color: exposureColor(g.avg, 0.8)
   })))}</div>`;
 
-  // Impact: wages exposed
+  // DoF risk-tier breakdown (cross-check against published Irish framework)
+  const dofDefs = [
+    { tier: "high",   label: "High risk",   color: "rgba(230,60,40,0.9)"  },
+    { tier: "medium", label: "Medium risk", color: "rgba(220,170,40,0.9)" },
+    { tier: "low",    label: "Low risk",    color: "rgba(50,180,80,0.9)"  },
+  ];
+  const dofTiers = dofDefs.map(t => {
+    let jobs = 0;
+    for (const d of data) { if (d.dof_risk_tier === t.tier && d.jobs) jobs += d.jobs; }
+    return { ...t, jobs };
+  });
+  document.getElementById("block7").innerHTML = `<h3>DoF risk tier</h3><div class="tier-bar">${renderTiers(dofTiers, totalJobs)}</div>`;
+
+  // Wages exposed (using current axis 7+ threshold)
   let wagesExposed = 0;
-  for (const d of data) { if (d.exposure != null && d.exposure >= 7 && d.jobs && d.pay) wagesExposed += d.jobs * d.pay; }
-  document.getElementById("block7").innerHTML = `<h3>Wages exposed</h3>
+  for (const d of data) { if (d[field] != null && d[field] >= 7 && d.jobs && d.pay) wagesExposed += d.jobs * d.pay; }
+  document.getElementById("block8").innerHTML = `<h3>Wages exposed</h3>
     <div class="stat-big" style="color:${exposureColor(8, 1)}">€${(wagesExposed / 1e9).toFixed(1)}B</div>
-    <div class="stat-label">annual, in jobs scoring 7+</div>`;
-  document.getElementById("block8").innerHTML = "";
+    <div class="stat-label">annual, in jobs scoring 7+ on this axis</div>`;
 }
 
 // ── Events ─────────────────────────────────────────────────────────────
@@ -862,10 +906,12 @@ function resize() { dpr = window.devicePixelRatio || 1; layout(); draw(); }
 // ── Legend gradient ────────────────────────────────────────────────────
 
 const LEGEND_CONFIG = {
-  exposure:  { low: "Low", high: "High" },
-  outlook:   { low: "Declining", high: "Growing" },
-  pay:       { low: "€20K", high: "€120K" },
-  education: { low: "No degree", high: "Doctoral" },
+  exposure:               { low: "Low",  high: "High" },
+  exposure_complementary: { low: "Low",  high: "High" },
+  exposure_substitutable: { low: "Low",  high: "High" },
+  outlook:                { low: "Declining", high: "Growing" },
+  pay:                    { low: "€20K", high: "€120K" },
+  education:              { low: "No degree", high: "Doctoral" },
 };
 
 function drawGradientLegend() {
@@ -873,7 +919,8 @@ function drawGradientLegend() {
   const gctx = c.getContext("2d");
   for (let x = 0; x < 80; x++) {
     const t = x / 79;
-    gctx.fillStyle = colorMode === "exposure" ? greenRedCSS(t, 1) : greenRedCSS(1 - t, 1);
+    const isExposure = colorMode === "exposure" || colorMode === "exposure_complementary" || colorMode === "exposure_substitutable";
+    gctx.fillStyle = isExposure ? greenRedCSS(t, 1) : greenRedCSS(1 - t, 1);
     gctx.fillRect(x, 0, 1, 8);
   }
   const cfg = LEGEND_CONFIG[colorMode];

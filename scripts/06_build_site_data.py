@@ -40,7 +40,10 @@ def main() -> None:
             "outlook_desc": row["outlook_desc"],
             "education": row["entry_education"],
             "exposure": score.get("exposure"),
+            "exposure_complementary": score.get("exposure_complementary"),
+            "exposure_substitutable": score.get("exposure_substitutable"),
             "exposure_rationale": score.get("rationale"),
+            "dof_risk_tier": row.get("dof_risk_tier", "") or None,
             "url": row.get("url", ""),
         })
 

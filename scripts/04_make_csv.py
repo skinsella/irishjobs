@@ -32,6 +32,33 @@ PAGES = REPO / "pages"
 DEN11 = REPO / "raw" / "pxstat" / "DEN11.json"
 OUT = REPO / "occupations.csv"
 
+# Map NSB sector chapter → Department of Finance AI risk tier.
+# Tiers follow the framework in Williamson, Gannon, Daly, Fitzgerald & Coates
+# (2024) "Artificial Intelligence: Friend or Foe? A Review of How AI Could
+# Impact Ireland's Labour Market" and the Department of Finance Economic
+# Insights Volume 1 2026, which classifies sectors by their concentration of
+# "at risk" occupations. The DoF analysis is at NACE-sector level; we map
+# NSB occupational sectors to the closest analogue.
+DOF_RISK_TIER = {
+    "ICT":                              "high",   # ICT — DoF's named high-risk sector
+    "Business & Financial":             "high",   # Financial activities — DoF high-risk
+    "Administrative & Secretarial":     "high",   # Heavy substitutable component
+    "Sales & Customer Service":         "high",   # Customer service highly digitised
+    "Science & Engineering":            "medium",
+    "Education":                        "medium",
+    "Legal & Security":                 "medium",
+    "Arts, Sports & Tourism":           "medium",
+    "Healthcare":                       "low",    # Physical care, regulated
+    "Social & Care":                    "low",    # Care work, in-person
+    "Construction":                     "low",
+    "Other Craft":                      "low",
+    "Agriculture & Animal Care":        "low",
+    "Hospitality":                      "low",
+    "Transport & Logistics":            "low",
+    "Operatives & Elementary":          "low",
+}
+
+
 # Map NSB NACE-sector phrases → CSO DEN11 sector indices.
 # NSB uses short names ("ICT", "Industry", "Professional activities");
 # DEN11 uses long-form labels. We match by representative keyword.
@@ -187,6 +214,7 @@ def main() -> None:
         "entry_education", "work_experience", "training",
         "num_jobs_2024", "projected_employment_2034",
         "outlook_pct", "outlook_desc", "employment_change",
+        "dof_risk_tier",
         "url",
     ]
 
@@ -238,6 +266,7 @@ def main() -> None:
             "outlook_pct": (round(growth_val) if growth_val is not None else ""),
             "outlook_desc": classify_outlook(growth_val, shortage),
             "employment_change": "",
+            "dof_risk_tier": DOF_RISK_TIER.get(entry["category"], ""),
             "url": entry["url"],
         }
         rows.append(row)
